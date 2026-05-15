@@ -1,28 +1,15 @@
-// PROTECTION
+/*
+|--------------------------------------------------------------------------
+| PROTECTION
+|--------------------------------------------------------------------------
+*/
 
 const adminUser = getCurrentUser();
 
 if (!adminUser || adminUser.role !== "admin") {
-    if (typeof showToast === "function") {
-        showToast("Accès refusé", "error");
-    }
-
-    window.location.href = "connexion.html";
-
-    throw new Error("Accès dashboard refusé");
+  window.location.href = "connexion.html";
+  throw new Error("Accès dashboard refusé");
 }
-
-/*
-|--------------------------------------------------------------------------
-| LOAD DATA
-|--------------------------------------------------------------------------
-*/
-
-const orders =
-    JSON.parse(localStorage.getItem("orders")) || [];
-
-const users =
-    JSON.parse(localStorage.getItem("users")) || [];
 
 /*
 |--------------------------------------------------------------------------
@@ -30,53 +17,31 @@ const users =
 |--------------------------------------------------------------------------
 */
 
-const totalOrders =
-    document.getElementById("total-orders");
-
-const totalRevenue =
-    document.getElementById("total-revenue");
-
-const pendingOrders =
-    document.getElementById("pending-orders");
-
-const totalClients =
-    document.getElementById("total-clients");
-
-const adminOrders =
-    document.getElementById("admin-orders");
+const totalOrders = document.getElementById("total-orders");
+const totalRevenue = document.getElementById("total-revenue");
+const pendingOrders = document.getElementById("pending-orders");
+const totalClients = document.getElementById("total-clients");
+const adminOrders = document.getElementById("admin-orders");
 
 /*
 |--------------------------------------------------------------------------
-| STATS
+| STATE
 |--------------------------------------------------------------------------
 */
 
-function renderStats() {
+let orders = [];
 
-    totalOrders.textContent =
-        orders.length;
+/*
+|--------------------------------------------------------------------------
+| RENDER STATS
+|--------------------------------------------------------------------------
+*/
 
-    const revenue =
-        orders.reduce((sum, order) => {
-
-            return sum + order.total;
-
-        }, 0);
-
-    totalRevenue.textContent =
-        `${revenue}€`;
-
-    const pending =
-        orders.filter(order =>
-            order.status === "en attente"
-        );
-
-    pendingOrders.textContent =
-        pending.length;
-
-    totalClients.textContent =
-        users.length;
-
+function renderStats(stats) {
+  totalOrders.textContent = stats.totalOrders || 0;
+  totalRevenue.textContent = `${Number(stats.totalRevenue || 0)}€`;
+  pendingOrders.textContent = stats.pendingOrders || 0;
+  totalClients.textContent = stats.totalClients || 0;
 }
 
 /*
@@ -86,96 +51,68 @@ function renderStats() {
 */
 
 function renderOrders() {
+  adminOrders.innerHTML = "";
 
-    adminOrders.innerHTML = "";
+  if (!orders || orders.length === 0) {
+    adminOrders.innerHTML = "<p>Aucune commande.</p>";
+    return;
+  }
 
-    if (orders.length === 0) {
+  orders.forEach((order) => {
+    const orderCard = document.createElement("div");
+    orderCard.classList.add("admin-order-card");
 
-        adminOrders.innerHTML =
-            "<p>Aucune commande.</p>";
+    orderCard.innerHTML = `
+      <div class="order-top">
+        <div>
+          <strong>Commande #${order.id}</strong>
+        </div>
 
-        return;
-    }
+        <div>
+          ${Number(order.total_price || 0)}€
+        </div>
+      </div>
 
-    orders.forEach(order => {
+      <div class="order-details">
+        <p>
+          <strong>Client :</strong>
+          ${order.firstname || ""} ${order.lastname || ""}
+        </p>
 
-        const orderCard =
-            document.createElement("div");
+        <p>
+          <strong>Collecte :</strong>
+          ${order.pickup_date || "Non renseignée"}
+        </p>
 
-        orderCard.classList.add("admin-order-card");
+        <p>
+          <strong>Livraison :</strong>
+          ${order.delivery_date || "Non renseignée"}
+        </p>
 
-        orderCard.innerHTML = `
+        <p>
+          <strong>Statut actuel :</strong>
+          ${order.status || "en_attente"}
+        </p>
+      </div>
 
-            <div class="order-top">
+      <div class="order-actions">
+        <select class="status-select" data-id="${order.id}">
+          <option value="en_attente">En attente</option>
+          <option value="collecte">Collecté</option>
+          <option value="en_traitement">En traitement</option>
+          <option value="pret">Prêt</option>
+          <option value="livre">Livré</option>
+        </select>
+      </div>
+    `;
 
-                <div>
-                    <strong>Commande #${order.id}</strong>
-                </div>
+    adminOrders.appendChild(orderCard);
 
-                <div>
-                    ${order.total}€
-                </div>
+    const select = orderCard.querySelector(".status-select");
+    select.value = order.status || "en_attente";
+  });
 
-            </div>
-
-            <div class="order-details">
-
-                <p>
-                    <strong>Collecte :</strong>
-                    ${order.pickupDate}
-                </p>
-
-                <p>
-                    <strong>Livraison :</strong>
-                    ${order.deliveryDate}
-                </p>
-
-                <p>
-                    <strong>Créneau :</strong>
-                    ${order.slot}
-                </p>
-
-            </div>
-
-            <div class="order-actions">
-
-                <select
-                    class="status-select"
-                    data-id="${order.id}"
-                >
-
-                    <option value="en attente">
-                        En attente
-                    </option>
-
-                    <option value="récupéré">
-                        Récupéré
-                    </option>
-
-                    <option value="en lavage">
-                        En lavage
-                    </option>
-
-                    <option value="prêt">
-                        Prêt
-                    </option>
-
-                    <option value="livré">
-                        Livré
-                    </option>
-
-                </select>
-
-            </div>
-
-        `;
-
-        adminOrders.appendChild(orderCard);
-
-    });
-
-    initStatusEvents();
-
+  initStatusEvents();
 }
 
 /*
@@ -185,36 +122,51 @@ function renderOrders() {
 */
 
 function initStatusEvents() {
+  const selects = document.querySelectorAll(".status-select");
 
-    const selects =
-        document.querySelectorAll(".status-select");
+  selects.forEach((select) => {
+    select.addEventListener("change", async () => {
+      const orderId = select.dataset.id;
+      const newStatus = select.value;
 
-    selects.forEach(select => {
-
-        select.addEventListener("change", () => {
-
-            const orderId =
-                Number(select.dataset.id);
-
-            const order =
-                orders.find(order =>
-                    order.id === orderId
-                );
-
-            order.status =
-                select.value;
-
-            localStorage.setItem(
-                "orders",
-                JSON.stringify(orders)
-            );
-
-            renderStats();
-
+      try {
+        await apiRequest(`/orders/${orderId}/status`, {
+          method: "PUT",
+          body: JSON.stringify({
+            status: newStatus,
+          }),
         });
 
+        showToast("Statut mis à jour", "success");
+
+        await loadDashboard();
+      } catch (error) {
+        showToast(error.message, "error");
+      }
+    });
+  });
+}
+
+/*
+|--------------------------------------------------------------------------
+| LOAD DASHBOARD
+|--------------------------------------------------------------------------
+*/
+
+async function loadDashboard() {
+  try {
+    const stats = await apiRequest("/admin/stats");
+    orders = await apiRequest("/orders");
+
+    renderStats({
+      ...stats,
+      totalClients: 0,
     });
 
+    renderOrders();
+  } catch (error) {
+    showToast(error.message, "error");
+  }
 }
 
 /*
@@ -223,5 +175,4 @@ function initStatusEvents() {
 |--------------------------------------------------------------------------
 */
 
-renderStats();
-renderOrders();
+loadDashboard();

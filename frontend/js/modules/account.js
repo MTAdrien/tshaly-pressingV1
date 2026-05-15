@@ -42,28 +42,43 @@ function renderOrders(orders) {
 
     orderCard.classList.add("order-card");
 
+    const itemsDetails = order.items
+      .map((item) => {
+        return `${item.quantity} x ${item.service_name}`;
+      })
+      .join(", ");
+
     orderCard.innerHTML = `
       <div>
         <strong>Commande #${order.id}</strong>
       </div>
 
-      <div>
+      <p>
+        <strong>Prix :</strong>
         ${Number(order.total_price || 0)}€
-      </div>
+      </p>
 
-      <div>
+      <p>
+        <strong>Statut :</strong>
         <span class="status ${order.status}">
           ${order.status || "en attente"}
         </span>
-      </div>
+      </p>
 
-      <div>
-        <small>Collecte : ${order.pickup_date || "Non renseignée"}</small>
-      </div>
+      <p>
+        <strong>Date de collecte :</strong>
+        ${order.pickup_date || "Non renseignée"}
+      </p>
 
-      <div>
-        <small>Livraison : ${order.delivery_date || "Non renseignée"}</small>
-      </div>
+      <p>
+        <strong>Date de livraison prévue :</strong>
+        ${order.delivery_date || "Non renseignée"}
+      </p>
+
+      <p>
+        <strong>Détail de la commande :</strong>
+        ${itemsDetails || "Aucun détail disponible"}
+      </p>
     `;
 
     ordersContainer.appendChild(orderCard);

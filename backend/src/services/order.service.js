@@ -32,7 +32,31 @@ export const addOrderItem = async (orderId, item) => {
 
 export const getUserOrders = async (userId) => {
   const result = await pool.query(
-    `SELECT * FROM orders WHERE user_id = $1 ORDER BY created_at DESC`,
+    `
+    SELECT
+      orders.id,
+      orders.status,
+      orders.total_price,
+      orders.pickup_date,
+      orders.delivery_date,
+      orders.created_at,
+      COALESCE(
+        json_agg(
+          json_build_object(
+            'service_name', order_items.service_name,
+            'quantity', order_items.quantity,
+            'price', order_items.price
+          )
+        ) FILTER (WHERE order_items.id IS NOT NULL),
+        '[]'
+      ) AS items
+    FROM orders
+    LEFT JOIN order_items
+      ON orders.id = order_items.order_id
+    WHERE orders.user_id = $1
+    GROUP BY orders.id
+    ORDER BY orders.created_at DESC
+    `,
     [userId]
   );
 
