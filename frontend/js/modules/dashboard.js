@@ -60,6 +60,20 @@ function formatStatus(status) {
   return STATUS_LABELS[status] || "En attente";
 }
 
+// =====================================================================
+// PAYMENT STATUS LABELS
+// ===================================================================== 
+
+const PAYMENT_STATUS_LABELS = {
+  pending: "En attente",
+  paid: "Payé",
+  failed: "Échoué",
+};
+
+function formatPaymentStatus(status) {
+  return PAYMENT_STATUS_LABELS[status] || "En attente";
+}
+
 /*
 |--------------------------------------------------------------------------
 | RENDER ORDERS
@@ -119,6 +133,13 @@ function renderOrders() {
         <p>
           <strong>Statut actuel :</strong>
           ${formatStatus(order.status)}
+        </p>
+
+        <p>
+          <strong>Statut paiement :</strong>
+          <span class="status ${order.payment_status}">
+            ${formatPaymentStatus(order.payment_status)}
+          </span>
         </p>
       </div>
 

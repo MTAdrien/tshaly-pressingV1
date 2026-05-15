@@ -2,12 +2,12 @@ import pool from "../config/db.js";
 
 // CREATION COMMANDE
 
-export const createOrder = async (userId, pickup_date, delivery_date) => {
+export const createOrder = async (userId, pickup_date, delivery_date, slot) => {
   const result = await pool.query(
-    `INSERT INTO orders (user_id, pickup_date, delivery_date)
-     VALUES ($1, $2, $3)
+    `INSERT INTO orders (user_id, pickup_date, delivery_date, slot)
+     VALUES ($1, $2, $3, $4)
      RETURNING *`,
-    [userId, pickup_date, delivery_date]
+    [userId, pickup_date, delivery_date, slot]
   );
 
   return result.rows[0];
@@ -36,9 +36,11 @@ export const getUserOrders = async (userId) => {
     SELECT
       orders.id,
       orders.status,
+      orders.payment_status,
       orders.total_price,
       orders.pickup_date,
       orders.delivery_date,
+      orders.slot,
       orders.created_at,
       COALESCE(
         json_agg(
@@ -71,9 +73,11 @@ export const getAllOrders = async () => {
     SELECT
       orders.id,
       orders.status,
+      orders.payment_status,
       orders.total_price,
       orders.pickup_date,
       orders.delivery_date,
+      orders.slot,
       orders.created_at,
       users.firstname,
       users.lastname,
@@ -127,4 +131,52 @@ export const updateOrderTotal = async (orderId, totalPrice) => {
   );
 
   return result.rows[0];
+};
+
+// UPDATE PAYMENT STATUS
+
+export const updatePaymentStatus = async (orderId, paymentStatus) => {
+  const result = await pool.query(
+    `UPDATE orders
+     SET payment_status = $1
+     WHERE id = $2
+     RETURNING *`,
+    [paymentStatus, orderId]
+  );
+
+  return result.rows[0];
+};
+
+// COUNT ORDERS BY SLOT AND PICKUP DATE
+
+export const countOrdersBySlotAndDate = async (pickupDate, slot) => {
+  const result = await pool.query(
+    `SELECT COUNT(*)
+     FROM orders
+     WHERE pickup_date = $1
+     AND slot = $2`,
+    [pickupDate, slot]
+  );
+
+  return Number(result.rows[0].count);
+};
+
+// GET FULL SLOTS BY DATE
+
+export const getFullSlotsByDate = async (
+  pickupDate,
+  maxOrdersPerSlot = 3
+) => {
+  const result = await pool.query(
+    `
+    SELECT slot
+    FROM orders
+    WHERE pickup_date = $1
+    GROUP BY slot
+    HAVING COUNT(*) >= $2
+    `,
+    [pickupDate, maxOrdersPerSlot]
+  );
+
+  return result.rows.map((row) => row.slot);
 };

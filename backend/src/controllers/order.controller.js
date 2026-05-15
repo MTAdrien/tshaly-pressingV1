@@ -5,13 +5,16 @@ import {
   getAllOrders,
   updateOrderStatus,
   updateOrderTotal,
+  updatePaymentStatus,
+  countOrdersBySlotAndDate,
+  getFullSlotsByDate,
 } from "../services/order.service.js";
 
 // CREATION COMMANDE
 
 export const createNewOrder = async (req, res) => {
   try {
-    const { pickup_date, delivery_date, items } = req.body;
+    const { pickup_date, delivery_date, slot, items } = req.body;
 
     if (!pickup_date || !delivery_date) {
       return res.status(400).json({
@@ -19,9 +22,28 @@ export const createNewOrder = async (req, res) => {
       });
     }
 
+    if (!slot) {
+      return res.status(400).json({
+        message: "Le créneau de collecte est obligatoire",
+      });
+    }
+
     if (!items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({
         message: "Le panier ne peut pas être vide",
+      });
+    }
+
+    const MAX_ORDERS_PER_SLOT = 3;
+
+    const existingOrdersForSlot = await countOrdersBySlotAndDate(
+      pickup_date,
+      slot
+    );
+
+    if (existingOrdersForSlot >= MAX_ORDERS_PER_SLOT) {
+      return res.status(400).json({
+        message: "Ce créneau est complet, veuillez en choisir un autre",
       });
     }
 
@@ -55,7 +77,8 @@ export const createNewOrder = async (req, res) => {
     const order = await createOrder(
       req.user.id,
       pickup_date,
-      delivery_date
+      delivery_date,
+      slot
     );
 
     for (const item of items) {
@@ -93,6 +116,34 @@ export const getMyOrders = async (req, res) => {
 
   } catch (error) {
     res.status(500).json({ message: "Erreur serveur", error });
+  }
+};
+
+// CRENEAUX COMPLETS PAR DATE
+
+export const getUnavailableSlots = async (req, res) => {
+  try {
+    const { pickup_date } = req.query;
+
+    if (!pickup_date) {
+      return res.status(400).json({
+        message: "La date de collecte est obligatoire",
+      });
+    }
+
+    const MAX_ORDERS_PER_SLOT = 3;
+
+    const fullSlots = await getFullSlotsByDate(
+      pickup_date,
+      MAX_ORDERS_PER_SLOT
+    );
+
+    res.status(200).json(fullSlots);
+  } catch (error) {
+    res.status(500).json({
+      message: "Erreur serveur",
+      error,
+    });
   }
 };
 
@@ -139,6 +190,47 @@ export const changeOrderStatus = async (req, res) => {
 
     res.status(200).json({
       message: "Statut mis à jour",
+      order,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Erreur serveur",
+      error,
+    });
+  }
+};
+
+// SIMULATION PAIEMENT COMMANDE
+
+export const simulatePayment = async (req, res) => {
+  try {
+    const { payment_status } = req.body;
+
+    const allowedPaymentStatuses = [
+      "pending",
+      "paid",
+      "failed",
+    ];
+
+    if (!allowedPaymentStatuses.includes(payment_status)) {
+      return res.status(400).json({
+        message: "Statut de paiement invalide",
+      });
+    }
+
+    const order = await updatePaymentStatus(
+      req.params.id,
+      payment_status
+    );
+
+    if (!order) {
+      return res.status(404).json({
+        message: "Commande introuvable",
+      });
+    }
+
+    res.status(200).json({
+      message: "Paiement simulé mis à jour",
       order,
     });
   } catch (error) {

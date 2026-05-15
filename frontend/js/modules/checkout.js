@@ -1,5 +1,3 @@
-console.log("checkout.js chargé");
-
 /*
 |--------------------------------------------------------------------------
 | DOM
@@ -8,6 +6,7 @@ console.log("checkout.js chargé");
 
 const checkoutButton = document.querySelector(".checkout-btn");
 const slots = document.querySelectorAll(".slot");
+const pickupDateInput = document.getElementById("pickup-date");
 
 let selectedSlot = null;
 
@@ -19,6 +18,11 @@ let selectedSlot = null;
 
 slots.forEach((slot) => {
   slot.addEventListener("click", () => {
+    if (slot.disabled) {
+      showToast("Ce créneau est complet.", "error");
+      return;
+    }
+
     slots.forEach((s) => s.classList.remove("active"));
 
     slot.classList.add("active");
@@ -26,6 +30,55 @@ slots.forEach((slot) => {
     selectedSlot = slot.textContent.trim();
   });
 });
+
+/*
+|--------------------------------------------------------------------------
+| UNAVAILABLE SLOTS
+|--------------------------------------------------------------------------
+*/
+
+async function loadUnavailableSlots() {
+  const pickupDate = pickupDateInput.value;
+
+  selectedSlot = null;
+
+  slots.forEach((slot) => {
+  if (!slot.dataset.value) {
+    slot.dataset.value = slot.textContent.trim().replace(" - Complet", "");
+  }
+
+  slot.disabled = false;
+  slot.classList.remove("active");
+  slot.classList.remove("disabled");
+  slot.textContent = slot.dataset.value;
+});
+
+if (!pickupDate) {
+  return;
+}
+
+try {
+  const unavailableSlots = await apiRequest(
+    `/orders/slots/unavailable?pickup_date=${pickupDate}`
+  );
+
+  slots.forEach((slot) => {
+    const slotValue = slot.textContent.trim();
+
+    if (unavailableSlots.includes(slotValue)) {
+      slot.disabled = true;
+      slot.classList.add("disabled");
+      slot.textContent = `${slotValue} - Complet`;
+    }
+  });
+} catch (error) {
+  showToast(error.message, "error");
+}
+}
+
+if (pickupDateInput) {
+  pickupDateInput.addEventListener("change", loadUnavailableSlots);
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -75,18 +128,30 @@ if (checkoutButton) {
     try {
       setLoading(checkoutButton, true);
 
-      await apiRequest("/orders", {
+      const orderResponse = await apiRequest("/orders", {
         method: "POST",
         body: JSON.stringify({
           pickup_date: pickupDate,
           delivery_date: deliveryDate,
+          slot: selectedSlot,
           items: cart,
+        }),
+      });
+
+      // ======================================================================
+      // SIMULATE PAYMENT SUCCESS
+      // ======================================================================
+
+      await apiRequest(`/orders/${orderResponse.order.id}/payment`, {
+        method: "PUT",
+        body: JSON.stringify({
+          payment_status: "paid",
         }),
       });
 
       localStorage.removeItem("cart");
 
-      showToast("Réservation confirmée avec succès.", "success");
+      showToast("Réservation et paiement confirmés avec succès.", "success");
 
       setTimeout(() => {
         window.location.href = "mon-compte.html";
