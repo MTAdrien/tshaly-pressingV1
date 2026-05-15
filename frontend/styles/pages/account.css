@@ -1,49 +1,72 @@
 .account-hero {
-    text-align: center;
-    padding: 60px 20px;
+  text-align: center;
+  padding: 60px 20px;
 }
 
 .account-layout {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 20px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 24px;
+  align-items: start;
 }
 
 .account-card {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  background: white;
+  padding: 24px;
+  border-radius: 18px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.account-card h2 {
+  margin-bottom: 1rem;
+}
+
+#user-info p {
+  margin-bottom: 0.6rem;
 }
 
 .order-card {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid #eee;
+  display: grid;
+  gap: 0.6rem;
+  padding: 18px;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  margin-bottom: 14px;
+  background: #fff;
 }
 
 .status {
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 12px;
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: #f1f1f1;
+  color: #333;
 }
 
-.status.en\ attente {
-    background: #f1f1f1;
+.status.en_attente,
+.status.pending {
+  background: #fff3cd;
+  color: #856404;
 }
 
-.status.livré {
-    background: #d4edda;
-    color: #155724;
+.status.collecte,
+.status.en_traitement,
+.status.pret {
+  background: #d1ecf1;
+  color: #0c5460;
 }
 
-@media (max-width: 768px) {
+.status.livre,
+.status.paid {
+  background: #d4edda;
+  color: #155724;
+}
 
-    .account-layout {
-        grid-template-columns: 1fr;
-    }
-
+.status.failed {
+  background: #f8d7da;
+  color: #721c24;
 }
 
 .profile-form {
@@ -78,15 +101,21 @@
 }
 
 #logout-btn {
-    color: #ea0b0b;
   width: 100%;
   margin-top: 1rem;
   text-align: center;
-  background-color: #ddd;
+  background-color: #f1f1f1;
+  color: #d90429;
 }
 
 #logout-btn:hover {
-    background-color: #ea0b0b;
-    color: white;
-    transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: #d90429;
+  color: white;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .account-layout {
+    grid-template-columns: 1fr;
+  }
 }
