@@ -1,113 +1,82 @@
 /*
 |--------------------------------------------------------------------------
-| LOGIN
+| LOGIN BACKEND
 |--------------------------------------------------------------------------
 */
 
-const loginForm =
-    document.getElementById("login-form");
+const loginForm = document.getElementById("login-form");
 
 if (loginForm) {
+  loginForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-    loginForm.addEventListener("submit", (event) => {
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value;
 
-        event.preventDefault();
+    try {
+      const data = await apiRequest("/auth/login", {
+        method: "POST",
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
 
-        const email =
-            document.getElementById("login-email").value;
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("currentUser", JSON.stringify(data.user));
 
-        const password =
-            document.getElementById("login-password").value;
+      showToast("Connexion réussie.", "success");
 
-        const users =
-            JSON.parse(localStorage.getItem("users")) || [];
-
-        const user = users.find(user => {
-
-            return (
-                user.email === email &&
-                user.password === password
-            );
-
-        });
-
-        if (!user) {
-
-            showToast("Identifiants incorrects.", "error");
-
-            return;
-        }
-
-        localStorage.setItem(
-            "currentUser",
-            JSON.stringify(user)
-        );
-
-        showToast("Connexion réussie.", "success");
-
-        window.location.href =
-            "mon-compte.html";
-
-    });
-
+      setTimeout(() => {
+        window.location.href = "mon-compte.html";
+      }, 800);
+    } catch (error) {
+      showToast(error.message, "error");
+    }
+  });
 }
 
 /*
 |--------------------------------------------------------------------------
-| REGISTER
+| REGISTER BACKEND
 |--------------------------------------------------------------------------
 */
 
-const registerForm =
-    document.getElementById("register-form");
+const registerForm = document.getElementById("register-form");
 
 if (registerForm) {
+  registerForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-    registerForm.addEventListener("submit", (event) => {
+    const name = document.getElementById("register-name").value.trim();
+    const email = document.getElementById("register-email").value.trim();
+    const password = document.getElementById("register-password").value;
 
-        event.preventDefault();
+    const nameParts = name.split(" ");
+    const firstname = nameParts[0];
+    const lastname = nameParts.slice(1).join(" ") || "Non renseigné";
 
-        const name =
-            document.getElementById("register-name").value;
+    try {
+      const data = await apiRequest("/auth/register", {
+        method: "POST",
+        body: JSON.stringify({
+          firstname,
+          lastname,
+          email,
+          password,
+        }),
+      });
 
-        const email =
-            document.getElementById("register-email").value;
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("currentUser", JSON.stringify(data.user));
 
-        const password =
-            document.getElementById("register-password").value;
+      showToast("Compte créé avec succès.", "success");
 
-        const users =
-            JSON.parse(localStorage.getItem("users")) || [];
-
-        const alreadyExists =
-            users.find(user => user.email === email);
-
-        if (alreadyExists) {
-
-            showToast("Compte déjà existant.", "error");
-
-            return;
-        }
-
-        const newUser = {
-            id: Date.now(),
-            name,
-            email,
-            password
-        };
-
-        users.push(newUser);
-
-        localStorage.setItem(
-            "users",
-            JSON.stringify(users)
-        );
-
-        showToast("Compte créé avec succès.", "success");
-
-        window.location.href =
-            "connexion.html";
-
-    });
-
+      setTimeout(() => {
+        window.location.href = "mon-compte.html";
+      }, 800);
+    } catch (error) {
+      showToast(error.message, "error");
+    }
+  });
 }
