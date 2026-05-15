@@ -158,10 +158,7 @@ async function loadDashboard() {
     const stats = await apiRequest("/admin/stats");
     orders = await apiRequest("/orders");
 
-    renderStats({
-      ...stats,
-      totalClients: 0,
-    });
+    renderStats(stats);
 
     renderOrders();
   } catch (error) {

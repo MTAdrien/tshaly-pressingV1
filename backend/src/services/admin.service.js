@@ -35,12 +35,18 @@ export const getDashboardStats = async () => {
      WHERE status = 'livre'`
   );
 
+  // total clients
+  const totalClientsResult = await pool.query(
+  `SELECT COUNT(*) FROM users WHERE role = 'client'`
+);
+
   return {
     totalOrders: Number(totalOrdersResult.rows[0].count),
     totalRevenue: Number(revenueResult.rows[0].coalesce),
     todayOrders: Number(todayOrdersResult.rows[0].count),
     pendingOrders: Number(pendingOrdersResult.rows[0].count),
     deliveredOrders: Number(deliveredOrdersResult.rows[0].count),
+    totalClients: Number(totalClientsResult.rows[0].count),
   };
 };
 
