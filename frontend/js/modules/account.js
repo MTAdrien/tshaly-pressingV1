@@ -1,3 +1,21 @@
+// =======================================================================
+// Fichier : frontend/js/modules/account.js
+// Description : Gère la page de compte utilisateur, affichant les informations personnelles et les commandes passées.
+// Auteur : Muyard Tayayi Adrien
+// Date de création : 5 Mai 2026
+// =======================================================================
+
+// =====================================================================
+// DOM 
+// =====================================================================
+
+const profileForm = document.getElementById("profile-form");
+const profileFirstname = document.getElementById("profile-firstname");
+const profileLastname = document.getElementById("profile-lastname");
+const profilePhone = document.getElementById("profile-phone");
+const profileAddress = document.getElementById("profile-address");
+const logoutBtn = document.getElementById("logout-btn");
+
 /*
 |--------------------------------------------------------------------------
 | ACCOUNT PAGE
@@ -23,6 +41,16 @@ function renderUser(user) {
   `;
 }
 
+// =====================================================================
+// INFOS UTILISATEUR
+// =====================================================================
+
+function fillProfileForm(user) {
+  profileFirstname.value = user.firstname || "";
+  profileLastname.value = user.lastname || "";
+  profilePhone.value = user.phone || "";
+  profileAddress.value = user.address || "";
+}
 /*
 |--------------------------------------------------------------------------
 | RENDER ORDERS
@@ -85,6 +113,47 @@ function renderOrders(orders) {
   });
 }
 
+// =====================================================================
+// MODIFICATIONS PROFIL
+// =====================================================================
+
+if (profileForm) {
+  profileForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    try {
+      const data = await apiRequest("/users/profile", {
+        method: "PUT",
+        body: JSON.stringify({
+          firstname: profileFirstname.value.trim(),
+          lastname: profileLastname.value.trim(),
+          phone: profilePhone.value.trim(),
+          address: profileAddress.value.trim(),
+        }),
+      });
+
+      localStorage.setItem("currentUser", JSON.stringify(data.user));
+
+      renderUser(data.user);
+      fillProfileForm(data.user);
+
+      showToast("Profil mis à jour", "success");
+    } catch (error) {
+      showToast(error.message, "error");
+    }
+  });
+}
+
+// =====================================================================
+// LOGOUT
+// =====================================================================
+
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", () => {
+    logout();
+  });
+}
+
 /*
 |--------------------------------------------------------------------------
 | LOAD ACCOUNT DATA
@@ -97,6 +166,7 @@ async function loadAccountData() {
     const orders = await apiRequest("/orders/my-orders");
 
     renderUser(profile);
+    fillProfileForm(profile);
     renderOrders(orders);
   } catch (error) {
     showToast(error.message, "error");

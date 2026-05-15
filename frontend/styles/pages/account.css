@@ -45,3 +45,48 @@
     }
 
 }
+
+.profile-form {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.profile-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.profile-form label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.profile-form input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  background-color: #fff;
+}
+
+.profile-form input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+#logout-btn {
+    color: #ea0b0b;
+  width: 100%;
+  margin-top: 1rem;
+  text-align: center;
+  background-color: #ddd;
+}
+
+#logout-btn:hover {
+    background-color: #ea0b0b;
+    color: white;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
