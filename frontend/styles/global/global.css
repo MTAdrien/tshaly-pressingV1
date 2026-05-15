@@ -1,0 +1,83 @@
+body {
+  font-family: var(--font-primary);
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-900);
+  line-height: 1.7;
+}
+
+.container {
+  width: 90%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+}
+
+section {
+  padding: var(--spacing-xl) 0;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+  color: var(--color-secondary);
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+p {
+  color: var(--color-gray-700);
+}
+
+.section-subtitle {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+
+@media (max-width: 768px) {
+
+    nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .account-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-content h1 {
+        font-size: 24px;
+    }
+
+}
+
+
+button {
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+.card, .stat-card, .account-card {
+    transition: 0.2s ease;
+}
+
+.card:hover, .stat-card:hover {
+    transform: translateY(-3px);
+}

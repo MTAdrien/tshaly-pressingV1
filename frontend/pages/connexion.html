@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Connexion - Tshaly Pressing</title>
+
+    <link rel="stylesheet" href="../styles/global/reset.css" />
+    <link rel="stylesheet" href="../styles/global/variables.css" />
+    <link rel="stylesheet" href="../styles/global/global.css" />
+
+    <link rel="stylesheet" href="../styles/components/navbar.css" />
+    <link rel="stylesheet" href="../styles/components/buttons.css" />
+    <link rel="stylesheet" href="../styles/components/toast.css" />
+
+    <link rel="stylesheet" href="../styles/pages/auth.css" />
+
+    <script src="../js/auth/auth-helper.js" defer></script>
+    <script src="../js/ui/toast.js" defer></script>
+    <script src="../js/auth/login.js" defer></script>
+    <script src="../js/auth/auth.js" defer></script>
+    <script src="../js/auth/auth-navbar.js" defer></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope&family=Montserrat&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <!-- ===== En-tête & navigation ===== -->
+    <header>
+      <nav>
+        <div class="nav-logo-header">
+          <!-- Logo -->
+          <a href="index.html"
+            ><img
+              src="../assets/logos/logo_tshaly.svg"
+              alt="Logo Tshaly pressing"
+          /></a>
+        </div>
+
+        <ul class="header-menu">
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="reservation.html">Réservation</a></li>
+          <li><a href="tarifs.html">Tarifs</a></li>
+          <li>
+            <a href="connexion.html" id="account-link"> Connexion </a>
+          </li>
+        </ul>
+        <div class="cart-navbar">
+          🛒
+
+          <span id="cart-count"> 0 </span>
+        </div>
+      </nav>
+    </header>
+    <main class="auth-page">
+      <div class="auth-card">
+        <h1>Connexion</h1>
+
+        <form id="login-form">
+          <div class="form-group">
+            <label>Email</label>
+
+            <input type="email" id="login-email" required />
+          </div>
+
+          <div class="form-group">
+            <label>Mot de passe</label>
+
+            <input type="password" id="login-password" required />
+          </div>
+
+          <button type="submit" class="btn-cta">Se connecter</button>
+        </form>
+
+        <p class="auth-link">
+          Pas encore inscrit ?
+          <a href="inscription.html"> Créer un compte </a>
+        </p>
+      </div>
+    </main>
+
+    <!-- ===== Footer ===== -->
+    <footer>
+      <div class="container footer-content">
+        <div class="nav-logo-footer">
+          <a href="index.html">
+            <img
+              src="../assets/logos/logo_tshaly.svg"
+              alt="Logo Tshaly pressing"
+            />
+          </a>
+        </div>
+
+        <nav>
+          <ul class="footer-menu">
+            <li><a href="#">Mentions légales</a></li>
+
+            <li><a href="#">Confidentialité</a></li>
+
+            <li><a href="#">CGV</a></li>
+
+            <li><a href="#">CGU</a></li>
+
+            <li><a href="#">À propos</a></li>
+          </ul>
+        </nav>
+
+        <p>© 2025 Tshaly Pressing — Tous droits réservés.</p>
+      </div>
+    </footer>
+    <div id="toast-container"></div>
+  </body>
+</html>

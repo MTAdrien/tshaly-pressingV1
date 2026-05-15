@@ -1,0 +1,23 @@
+.btn-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 30px;
+
+  background-color: var(--color-primary);
+  color: var(--color-white);
+
+  padding: 16px 28px;
+
+  border-radius: var(--radius-md);
+
+  font-weight: 600;
+
+  transition: var(--transition);
+}
+
+.btn-cta:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+}

@@ -1,0 +1,37 @@
+footer {
+  background-color: var(--color-secondary);
+
+  color: var(--color-white);
+
+  padding: 60px 0 30px;
+}
+
+.nav-logo-footer img {
+  width: 120px;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.footer-menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footer-menu a {
+  color: rgba(255,255,255,0.8);
+
+  transition: var(--transition);
+}
+
+.footer-menu a:hover {
+  color: var(--color-white);
+}
+
+footer p {
+  color: rgba(255,255,255,0.7);
+}
