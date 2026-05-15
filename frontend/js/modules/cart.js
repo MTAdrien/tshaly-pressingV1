@@ -1,126 +1,106 @@
-// Local Storage
+// ==========================================================================
+// | Cart Module
+// | ------------------------------------------------------------------------
+// | Gère le panier d'achat : ajout, suppression, affichage et stockage.
+// | Le panier est stocké en localStorage pour la V1.
+// ==========================================================================
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// DOM Elements
+//=========================================================================
+// DOM ELEMENTS
+//=========================================================================
 
-const addButtons =
-  document.querySelectorAll(".add-to-cart-btn");
 
-const cartItemsContainer =
-  document.getElementById("cart-items");
+const addButtons = document.querySelectorAll(".add-to-cart-btn");
+const cartItemsContainer = document.getElementById("cart-items");
+const cartTotal = document.getElementById("cart-total");
+const cartCount = document.getElementById("cart-count");
+const cartSection = document.getElementById("cart-section");
 
-const cartTotal =
-  document.getElementById("cart-total");
-
-const cartCount =
-  document.getElementById("cart-count");
-
-const cartSection =
-  document.getElementById("cart-section");
-
-// AJOUT AU PANIER
+// =========================================================================
+//  AJOUTER AU PANIER
+// =========================================================================
 
 addButtons.forEach((button) => {
-
   button.addEventListener("click", (event) => {
-
-    // éviter les autres boutons CTA
     const card = event.target.closest(".reservation-card");
 
     if (!card) return;
 
     const serviceName = card.dataset.name;
-
     const price = Number(card.dataset.price);
-
     const quantityInput = card.querySelector(".quantity-input");
-
     const quantity = Number(quantityInput.value);
 
-    const existingItem = cart.find(
-      (item) => item.service_name === serviceName
-    );
+    if (!quantity || quantity <= 0) {
+      showToast("Veuillez choisir une quantité valide.", "error");
+      return;
+    }
 
-    // si article déjà présent
+    const existingItem = cart.find((item) => {
+      return item.service_name === serviceName;
+    });
+
     if (existingItem) {
-
       existingItem.quantity += quantity;
-
     } else {
-
       cart.push({
         service_name: serviceName,
         price,
         quantity,
       });
-
     }
 
     saveCart();
-
     renderCart();
 
+    showToast("Article ajouté au panier.", "success");
   });
-
 });
 
-// SAVE LOCAL STORAGE
+// ==========================================================================
+//  SAUVEGARDER LE PANIER
+// =========================================================================
 
 function saveCart() {
-
-  localStorage.setItem(
-    "cart",
-    JSON.stringify(cart)
-  );
-
+  localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-// RENDER CART
+// ==========================================================================
+//  RENDER LE PANIER
+// =========================================================================
 
 function renderCart() {
-
-  // SECURITY
-
   if (!cartCount) return;
 
   if (!cartItemsContainer || !cartTotal) {
-
     updateCartCount();
-
     return;
-
   }
 
-  // VISIBILITY
-
   if (cart.length === 0) {
-
     if (cartSection) {
       cartSection.classList.add("hidden");
     }
 
     cartCount.classList.add("hidden");
-
   } else {
-
     if (cartSection) {
       cartSection.classList.remove("hidden");
     }
 
     cartCount.classList.remove("hidden");
-
   }
+
   cartItemsContainer.innerHTML = "";
 
   let total = 0;
 
   cart.forEach((item, index) => {
-
     total += item.price * item.quantity;
 
     const cartItem = document.createElement("div");
-
     cartItem.classList.add("cart-item");
 
     cartItem.innerHTML = `
@@ -133,79 +113,55 @@ function renderCart() {
         ${item.price * item.quantity}€
       </div>
 
-      <button
-        class="remove-btn"
-        data-index="${index}"
-      >
+      <button class="remove-btn" data-index="${index}">
         ✕
       </button>
     `;
 
     cartItemsContainer.appendChild(cartItem);
-
   });
 
   cartTotal.textContent = `${total}€`;
 
   updateCartCount();
-
-  addRemoveEvents();
-
+  initRemoveButtons();
 }
 
-// REMOVE ITEM
+// ==========================================================================
+//  SUPPRIMER UN ARTICLE
+// ==========================================================================
 
-function addRemoveEvents() {
-
+function initRemoveButtons() {
   const removeButtons = document.querySelectorAll(".remove-btn");
 
   removeButtons.forEach((button) => {
-
     button.addEventListener("click", () => {
-
-      const index = button.dataset.index;
+      const index = Number(button.dataset.index);
 
       cart.splice(index, 1);
 
       saveCart();
-
       renderCart();
 
+      showToast("Article retiré du panier.", "info");
     });
-
   });
-
 }
 
-// UPDATE CART COUNT
+// ==========================================================================
+//  MISE À JOUR DU COMPTEUR
+// ==========================================================================
 
 function updateCartCount() {
-
-  const totalItems = cart.reduce(
-    (acc, item) => acc + item.quantity,
-    0
-  );
+  const totalItems = cart.reduce((acc, item) => {
+    return acc + item.quantity;
+  }, 0);
 
   cartCount.textContent = totalItems;
-
 }
 
-// Initial render
+// ==========================================================================
+//  INIT
+// ==========================================================================
 
 renderCart();
-
-// JSON API READY PAYLOAD
-
-function prepareOrderPayload() {
-
-  return {
-    items: cart,
-  };
-
-}
-
-// TEST
-
-console.log(
-  prepareOrderPayload()
-);

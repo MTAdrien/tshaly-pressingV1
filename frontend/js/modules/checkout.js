@@ -1,20 +1,25 @@
-/*
-|--------------------------------------------------------------------------
-| DOM
-|--------------------------------------------------------------------------
-*/
+// ==========================================================================
+// DOM ELEMENTS
+// ==========================================================================
 
 const checkoutButton = document.querySelector(".checkout-btn");
 const slots = document.querySelectorAll(".slot");
 const pickupDateInput = document.getElementById("pickup-date");
+const deliveryDateInput = document.getElementById("delivery-date");
+
+// ==========================================================================
+// ETAT DE LA SÉLECTION DES CRÉNEAUX
+// ==========================================================================
 
 let selectedSlot = null;
 
-/*
-|--------------------------------------------------------------------------
-| SLOT SELECTION
-|--------------------------------------------------------------------------
-*/
+// ========================================================================
+// CRÉNEAUX DE COLLECTE
+// ========================================================================
+//
+// L'utilisateur ne peut sélectionner qu'un seul créneau.
+// Si complet, il est désactivé et ne peut plus être choisi.
+// --------------------------------------------------------------------------
 
 slots.forEach((slot) => {
   slot.addEventListener("click", () => {
@@ -27,43 +32,64 @@ slots.forEach((slot) => {
 
     slot.classList.add("active");
 
-    selectedSlot = slot.textContent.trim();
+    selectedSlot = slot.dataset.value || slot.textContent.trim();
   });
 });
 
-/*
-|--------------------------------------------------------------------------
-| UNAVAILABLE SLOTS
-|--------------------------------------------------------------------------
-*/
+
+// ==========================================================================
+// LOAD UNAVAILABLE SLOTS
+// ==========================================================================
+// Le frontend demande au backend quels créneaux sont complets.
+// --------------------------------------------------------------------------
+
 
 async function loadUnavailableSlots() {
   const pickupDate = pickupDateInput.value;
 
   selectedSlot = null;
 
-  slots.forEach((slot) => {
-  if (!slot.dataset.value) {
-    slot.dataset.value = slot.textContent.trim().replace(" - Complet", "");
+  resetSlots();
+
+  if (!pickupDate) return;
+
+  try {
+    const unavailableSlots = await apiRequest(
+      `/orders/slots/unavailable?pickup_date=${pickupDate}`
+    );
+
+    disableUnavailableSlots(unavailableSlots);
+  } catch (error) {
+    showToast(error.message, "error");
   }
-
-  slot.disabled = false;
-  slot.classList.remove("active");
-  slot.classList.remove("disabled");
-  slot.textContent = slot.dataset.value;
-});
-
-if (!pickupDate) {
-  return;
 }
 
-try {
-  const unavailableSlots = await apiRequest(
-    `/orders/slots/unavailable?pickup_date=${pickupDate}`
-  );
+// ==========================================================================
+// REINITIALISATION DES CRÉNEAUX
+// ==========================================================================
+// Réinitialise l'état des créneaux avant de charger les créneaux complets.
+// --------------------------------------------------------------------------
 
+function resetSlots() {
   slots.forEach((slot) => {
-    const slotValue = slot.textContent.trim();
+    if (!slot.dataset.value) {
+      slot.dataset.value = slot.textContent.trim().replace(" - Complet", "");
+    }
+
+    slot.disabled = false;
+    slot.classList.remove("active");
+    slot.classList.remove("disabled");
+    slot.textContent = slot.dataset.value;
+  });
+}
+
+// ==========================================================================
+// DESACTIVATION DES CRÉNEAUX INDISPONIBLES
+// ==========================================================================
+
+function disableUnavailableSlots(unavailableSlots) {
+  slots.forEach((slot) => {
+    const slotValue = slot.dataset.value;
 
     if (unavailableSlots.includes(slotValue)) {
       slot.disabled = true;
@@ -71,20 +97,19 @@ try {
       slot.textContent = `${slotValue} - Complet`;
     }
   });
-} catch (error) {
-  showToast(error.message, "error");
 }
-}
+
+// ==========================================================================
+// CHANGEMENT DE DATE DE COLLECTE
+// ==========================================================================
 
 if (pickupDateInput) {
   pickupDateInput.addEventListener("change", loadUnavailableSlots);
 }
 
-/*
-|--------------------------------------------------------------------------
-| CHECKOUT BACKEND
-|--------------------------------------------------------------------------
-*/
+// ==========================================================================
+// CHECKOUT
+// ==========================================================================
 
 if (checkoutButton) {
   checkoutButton.addEventListener("click", async () => {
@@ -102,52 +127,24 @@ if (checkoutButton) {
 
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    const pickupDate = document.getElementById("pickup-date").value;
-    const deliveryDate = document.getElementById("delivery-date").value;
+    const pickupDate = pickupDateInput.value;
+    const deliveryDate = deliveryDateInput.value;
 
-    if (cart.length === 0) {
-      showToast("Votre panier est vide.", "error");
-      return;
-    }
-
-    if (!pickupDate) {
-      showToast("Veuillez sélectionner la date de prise en charge.", "error");
-      return;
-    }
-
-    if (!deliveryDate) {
-      showToast("Veuillez sélectionner la date de livraison.", "error");
-      return;
-    }
-
-    if (!selectedSlot) {
-      showToast("Veuillez sélectionner un créneau.", "error");
+    if (!validateCheckout(cart, pickupDate, deliveryDate)) {
       return;
     }
 
     try {
       setLoading(checkoutButton, true);
 
-      const orderResponse = await apiRequest("/orders", {
-        method: "POST",
-        body: JSON.stringify({
-          pickup_date: pickupDate,
-          delivery_date: deliveryDate,
-          slot: selectedSlot,
-          items: cart,
-        }),
-      });
+      const orderResponse = await createOrder(
+        pickupDate,
+        deliveryDate,
+        selectedSlot,
+        cart
+      );
 
-      // ======================================================================
-      // SIMULATE PAYMENT SUCCESS
-      // ======================================================================
-
-      await apiRequest(`/orders/${orderResponse.order.id}/payment`, {
-        method: "PUT",
-        body: JSON.stringify({
-          payment_status: "paid",
-        }),
-      });
+      await simulatePayment(orderResponse.order.id);
 
       localStorage.removeItem("cart");
 
@@ -164,11 +161,68 @@ if (checkoutButton) {
   });
 }
 
-/*
-|--------------------------------------------------------------------------
-| LOADER
-|--------------------------------------------------------------------------
-*/
+// ==========================================================================
+// VALIDATION DU CHECKOUT
+// ==========================================================================
+
+function validateCheckout(cart, pickupDate, deliveryDate) {
+  if (cart.length === 0) {
+    showToast("Votre panier est vide.", "error");
+    return false;
+  }
+
+  if (!pickupDate) {
+    showToast("Veuillez sélectionner la date de prise en charge.", "error");
+    return false;
+  }
+
+  if (!deliveryDate) {
+    showToast("Veuillez sélectionner la date de livraison.", "error");
+    return false;
+  }
+
+  if (!selectedSlot) {
+    showToast("Veuillez sélectionner un créneau.", "error");
+    return false;
+  }
+
+  return true;
+}
+
+// ==========================================================================
+// CRÉATION DE LA COMMANDE
+// ==========================================================================
+// Envoie une requête API pour créer une nouvelle commande avec les informations fournies.
+// --------------------------------------------------------------------------
+
+async function createOrder(pickupDate, deliveryDate, slot, cart) {
+  return await apiRequest("/orders", {
+    method: "POST",
+    body: JSON.stringify({
+      pickup_date: pickupDate,
+      delivery_date: deliveryDate,
+      slot,
+      items: cart,
+    }),
+  });
+}
+
+// ==========================================================================
+// SIMULATION DE PAIEMENT
+// ==========================================================================
+
+async function simulatePayment(orderId) {
+  return await apiRequest(`/orders/${orderId}/payment`, {
+    method: "PUT",
+    body: JSON.stringify({
+      payment_status: "paid",
+    }),
+  });
+}
+
+// ==========================================================================
+// ETAT DE CHARGEMENT DU CHECKOUT
+// ==========================================================================
 
 function setLoading(button, isLoading) {
   const text = button.querySelector(".btn-text");
