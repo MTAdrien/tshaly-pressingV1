@@ -3,11 +3,13 @@
 const adminUser = getCurrentUser();
 
 if (!adminUser || adminUser.role !== "admin") {
+    if (typeof showToast === "function") {
+        showToast("Accès refusé", "error");
+    }
 
-    showToast("Accès refusé", "error");
+    window.location.href = "connexion.html";
 
-    window.location.href = "index.html";
-
+    throw new Error("Accès dashboard refusé");
 }
 
 /*

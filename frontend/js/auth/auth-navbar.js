@@ -6,55 +6,36 @@
 
 const authUser = getCurrentUser();
 
-const accountLink =
-    document.getElementById("account-link");
+const accountLink = document.getElementById("account-link");
+const headerMenu = document.querySelector(".header-menu");
 
 /*
 |--------------------------------------------------------------------------
-| SAFE GUARD
-|--------------------------------------------------------------------------
-*/
-
-/*
-|--------------------------------------------------------------------------
-| USER CONNECTED
+| ACCOUNT LINK
 |--------------------------------------------------------------------------
 */
 
 if (authUser && accountLink) {
-
-    accountLink.textContent = authUser.name ? "Mon compte" : "Connexion";
-    accountLink.href = "mon-compte.html";
-
+  accountLink.textContent = "Mon compte";
+  accountLink.href = "mon-compte.html";
 } else if (accountLink) {
-
-    accountLink.textContent = "Connexion";
-    accountLink.href = "connexion.html";
+  accountLink.textContent = "Connexion";
+  accountLink.href = "connexion.html";
 }
 
-// ===========================================================================
-// LIEN DASHBOARD ADMIN
-// ===========================================================================
+/*
+|--------------------------------------------------------------------------
+| ADMIN DASHBOARD LINK
+|--------------------------------------------------------------------------
+*/
 
-const headerMenu =
-    document.querySelector(".header-menu");
+if (authUser && authUser.role === "admin" && headerMenu) {
+  const adminLi = document.createElement("li");
+  const adminLink = document.createElement("a");
 
-if (authUser && authUser.role === "admin") {
+  adminLink.href = "dashboard.html";
+  adminLink.textContent = "Dashboard";
 
-    const adminLi =
-        document.createElement("li");
-
-    const adminLink =
-        document.createElement("a");
-
-    adminLink.href =
-        "dashboard.html";
-
-    adminLink.textContent =
-        "Dashboard";
-
-    adminLi.appendChild(adminLink);
-
-    headerMenu.appendChild(adminLi);
-
+  adminLi.appendChild(adminLink);
+  headerMenu.appendChild(adminLi);
 }

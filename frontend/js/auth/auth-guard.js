@@ -1,13 +1,21 @@
-const user = getCurrentUser();
+/*
+|--------------------------------------------------------------------------
+| ADMIN GUARD
+|--------------------------------------------------------------------------
+*/
 
-if (!user) {
+const guardUser = getCurrentUser();
 
-    if (typeof showToast === "function") {
-        showToast("Connexion requise", "error");
-    }
+if (!isAuthenticated()) {
+  if (typeof showToast === "function") {
+    showToast("Connexion requise", "error");
+    window.location.href = "connexion.html";
+  };
+}
 
-    setTimeout(() => {
-        window.location.href = "connexion.html";
-    }, 800);
-
+if (guardUser && guardUser.role !== "admin") {
+  if (typeof showToast === "function") {
+    showToast("Accès administrateur requis", "error");
+    window.location.href = "mon-compte.html";
+  };
 }

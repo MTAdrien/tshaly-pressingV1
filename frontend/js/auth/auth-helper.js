@@ -1,5 +1,17 @@
 function getCurrentUser() {
-  return JSON.parse(localStorage.getItem("currentUser"));
+  const user = localStorage.getItem("currentUser");
+
+  if (!user) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(user);
+  } catch (error) {
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("token");
+    return null;
+  }
 }
 
 function getToken() {
