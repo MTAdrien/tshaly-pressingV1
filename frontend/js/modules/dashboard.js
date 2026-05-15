@@ -44,6 +44,22 @@ function renderStats(stats) {
   totalClients.textContent = stats.totalClients || 0;
 }
 
+// =====================================================================
+// STATUS LABELS
+// =====================================================================
+
+const STATUS_LABELS = {
+  en_attente: "En attente",
+  collecte: "Collecté",
+  en_traitement: "En traitement",
+  pret: "Prêt",
+  livre: "Livré",
+};
+
+function formatStatus(status) {
+  return STATUS_LABELS[status] || "En attente";
+}
+
 /*
 |--------------------------------------------------------------------------
 | RENDER ORDERS
@@ -62,6 +78,12 @@ function renderOrders() {
     const orderCard = document.createElement("div");
     orderCard.classList.add("admin-order-card");
 
+    const itemsDetails = order.items
+      .map((item) => {
+        return `${item.quantity} x ${item.service_name}`;
+      })
+      .join(", ");
+
     orderCard.innerHTML = `
       <div class="order-top">
         <div>
@@ -75,8 +97,13 @@ function renderOrders() {
 
       <div class="order-details">
         <p>
+          <strong>Détail commande :</strong>
+          ${itemsDetails || "Aucun détail disponible"}
+        </p>
+        
+        <p>
           <strong>Client :</strong>
-          ${order.firstname || ""} ${order.lastname || ""}
+          ${order.firstname || ""} ${order.lastname || ""} — ${order.email || ""}
         </p>
 
         <p>
@@ -91,7 +118,7 @@ function renderOrders() {
 
         <p>
           <strong>Statut actuel :</strong>
-          ${order.status || "en_attente"}
+          ${formatStatus(order.status)}
         </p>
       </div>
 

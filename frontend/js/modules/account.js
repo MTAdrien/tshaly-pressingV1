@@ -51,6 +51,23 @@ function fillProfileForm(user) {
   profilePhone.value = user.phone || "";
   profileAddress.value = user.address || "";
 }
+
+// =====================================================================
+// STATUS LABELS
+// =====================================================================
+
+const STATUS_LABELS = {
+  en_attente: "En attente",
+  collecte: "Collecté",
+  en_traitement: "En traitement",
+  pret: "Prêt",
+  livre: "Livré",
+};
+
+function formatStatus(status) {
+  return STATUS_LABELS[status] || "En attente";
+}
+
 /*
 |--------------------------------------------------------------------------
 | RENDER ORDERS
@@ -89,7 +106,7 @@ function renderOrders(orders) {
       <p>
         <strong>Statut :</strong>
         <span class="status ${order.status}">
-          ${order.status || "en attente"}
+          ${formatStatus(order.status)}
         </span>
       </p>
 
