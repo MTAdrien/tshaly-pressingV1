@@ -6,18 +6,14 @@ dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 
-/*
-| Test connexion PostgreSQL
-*/
+try {
+  await pool.query("SELECT NOW()");
 
-pool.connect()
-  .then(() => {
-    console.log("PostgreSQL connecté");
+  console.log("PostgreSQL connecté");
 
-    app.listen(PORT, () => {
-      console.log(`Serveur lancé sur le port ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.error("Erreur connexion PostgreSQL :", error);
+  app.listen(PORT, () => {
+    console.log(`Serveur lancé sur le port ${PORT}`);
   });
+} catch (error) {
+  console.error("Erreur connexion PostgreSQL :", error);
+}
