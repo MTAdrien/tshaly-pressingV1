@@ -1,195 +1,309 @@
-# Tshaly Pressing — SaaS V1
+Tshaly Pressing — SaaS V1
 
-Tshaly Pressing est une application SaaS de pressing connecté développée Full Stack dans une logique produit réelle.
+Tshaly Pressing est un projet Full Stack développé autour d’un besoin métier concret :
+Permettre à un pressing de gérer ses commandes en ligne avec une logique proche d’un vrai fonctionnement terrain.
 
-Le projet permet à des clients de réserver des prestations de pressing en ligne, gérer leurs commandes, suivre leur traitement et interagir avec une plateforme administrateur.
+L’idée de départ était de comprendre comment construire une application SaaS complète côté frontend et backend, tout en travaillant sur un projet crédible pour mon portfolio développeur junior.
+Au fil du développement, le projet a évolué vers une application plus structurée avec authentification, gestion des commandes, logique de créneaux, dashboard administrateur et communication API REST.
 
-Cette V1 a été conçue pour la société SAS TSHALY PRESSING et a été intégrée à mon portfolio.
+Le fonctionnement général est le suivant :
 
-Cela me permet de démontrer mes compétences en:
+Un utilisateur peut créer un compte, se connecter, réserver une collecte, ajouter des prestations à son panier puis suivre l’état de sa commande.
+Côté administrateur, un dashboard permet de suivre les commandes, les revenus, les clients et l’évolution des statuts.
 
-- Software Development,
-- Full Stack Development,
-- logique métier SaaS,
-- architecture backend,
+Le projet a surtout été construit pour apprendre à structurer une vraie application web moderne :
 
----
+- séparation frontend/backend,
+- architecture MVC,
+- gestion d’API REST,
+- PostgreSQL,
+- authentification JWT,
+- logique métier,
+- déploiement cloud.
 
-# Objectifs du projet
+Le backend est construit avec Node.js, Express et PostgreSQL.
 
-Le projet a été développé afin de :
+L’API expose plusieurs routes sécurisées pour gérer les utilisateurs, les commandes et les fonctionnalités administrateur.
 
-- construire une vraie application SaaS cohérente,
-- apprendre l’architecture Full Stack moderne,
-- travailler une logique métier réaliste,
-- comprendre la connexion Frontend - Backend,
-- implémenter une API REST sécurisée,
-- manipuler PostgreSQL,
-- développer une architecture MVC maintenable.
+L’application utilise notamment :
 
----
+- un système d’authentification avec JWT,
+- des middlewares de protection de routes,
+- des rôles admin/client,
+- des calculs automatiques de commandes,
+- une logique de limitation de créneaux,
+- un dashboard métier avec statistiques.
 
-# Fonctionnalités principales
+L’objectif n’était pas de créer une application parfaite, mais surtout de comprendre comment une vraie application Full Stack fonctionne dans son ensemble.
 
-## Côté Client
+## Démo ##
 
-- Création de compte
-- Connexion JWT
-- Gestion session utilisateur
-- Réservation de prestations
-- Panier dynamique
-- Checkout connecté backend
-- Simulation paiement
-- Suivi des commandes
-- Statut des commandes
-- Profil utilisateur modifiable
-- Créneaux dynamiques
-- Blocage des créneaux complets
+Frontend : https://tshaly-pressing-v1.vercel.app
 
----
+Backend API : https://tshaly-pressingv1.onrender.com
 
-## Côté Administrateur
+Exemple d’endpoint de test API:
 
-- Dashboard administrateur sécurisé
-- Liste des commandes
-- Mise à jour des statuts
-- Statistiques globales
-- Revenus
-- Nombre de clients
-- Commandes du jour
-- Suivi des paiements
-- Vue CRM simplifiée
+GET /api/test
 
----
+Retour :
 
-# Stack utilisées
+{
+  "message": "API Tshaly Pressing opérationnelle"
+}
 
-## Frontend
 
-- HTML5
-- CSS3
-- JavaScript Vanilla
+## Screenshots ##
 
-## Backend
+Les captures sont accèssibles dans "README/assets/screenshots/":
 
-- Node.js
-- Express.js
-- PostgreSQL
+![Accueil](README/assets/screenshots/home.png) et (README/assets/screenshots/home-mobile.png)
 
-## Authentification
+![Dashboard](README/assets/screenshots/dashboard.png) et (README/assets/screenshots/dashboard-mobile.png)
 
-- JWT
-- bcrypt
+![Mon Compte](README/assets/screenshots/mon-compte.png) et (README/assets/screenshots/mon-compte.png)
 
----
+![Réservation](README/assets/screenshots/reservation.png) et (README/assets/screenshots/reservation-mobile.png)
 
-# Architecture du projet
+![Tarifs](README/assets/screenshots/tarifs.png) et (README/assets/screenshots/tarifs-mobile.png)
+
+![Inscription](README/assets/screenshots/inscription.png) et (README/assets/screenshots/inscription-mobile.png)
+
+![Connexion](README/assets/screenshots/connexion.png) et (README/assets/screenshots/connexion-mobile.png)
+
+## Fonctionnalités ##
+
+L’application permet aujourd’hui :
+
+- l’inscription et la connexion utilisateur avec JWT,
+- la protection des routes privées,
+- la gestion des rôles admin/client,
+- la création de commandes,
+- l’ajout d’articles dans une commande,
+- le calcul automatique du montant total,
+- le suivi des statuts de traitement,
+- la simulation de paiement,
+- la récupération des commandes utilisateur,
+- la limitation du nombre de commandes par créneau,
+- l’affichage des créneaux complets,
+- un dashboard administrateur avec statistiques métier.
+
+Le backend repose sur plusieurs routes organisées par domaine :
+
+/api/auth
+/api/users
+/api/orders
+/api/admin
+
+L’authentification fonctionne avec JWT et middleware de protection.
+Les routes administrateur utilisent également un contrôle de rôle afin de limiter l’accès aux fonctionnalités sensibles.
+
+La logique métier des commandes a été l’une des parties les plus intéressantes à construire.
+Le backend vérifie par exemple :
+
+- que le panier n’est pas vide
+- que les quantités sont valides
+- que les prix sont cohérents
+- que les créneaux ne dépassent pas une capacité maximale
+- puis calcule automatiquement le total de la commande côté serveur.
+
+## Stack technique ##
 
 Frontend
-│
-├── Pages HTML
-├── Modules JavaScript
-├── UI / UX
-└── API Client
-        │
-        ▼
-Backend Express API
-│
-├── Routes
-├── Controllers
-├── Services
-├── Middlewares
-└── PostgreSQL
+HTML
+CSS
+JavaScript
 
-# Architecture Backend
+J’ai volontairement utilisé JavaScript pour mieux comprendre les bases du développement frontend et m'exercer avant de passer à des frameworks plus avancés.
 
-backend/src
-│
+Backend
+Node.js
+Express.js
+
+Express a été choisi pour apprendre la création d’API REST de manière assez simple et lisible.
+Cela m’a permis de mieux comprendre les routes, les middlewares, les contrôleurs et la séparation des responsabilités.
+
+Le backend utilise une structure MVC afin d’éviter d’avoir toute la logique dans un seul fichier.
+
+Base de données
+PostgreSQL
+
+PostgreSQL a été utilisé pour travailler une vraie base relationnelle avec :
+
+- relations utilisateurs/commandes,
+- requêtes SQL,
+- agrégations,
+- logique métier côté backend.
+
+Le projet utilise le package pg pour la connexion à la base.
+
+Authentification
+JWT
+bcrypt
+
+Les mots de passe sont hashés avec bcrypt avant stockage.
+
+Les tokens JWT permettent de sécuriser les routes privées et de gérer les rôles utilisateur/admin.
+
+## Déploiement ##
+
+Le projet a été pensé pour être déployé progressivement sur des solutions cloud accessibles pour un projet junior :
+
+Vercel (frontend),
+Render (backend),
+Neon PostgreSQL.
+
+L’objectif était aussi de comprendre les problématiques réelles de déploiement et de configuration d’environnement.
+
+## Architecture du projet ##
+
+Le projet est séparé en deux parties :
+
+frontend/
+backend/
+
+Le backend suit une organisation MVC relativement simple :
+
+src/
 ├── controllers/
-├── routes/
 ├── services/
+├── routes/
 ├── middlewares/
 ├── config/
 ├── utils/
-├── app.js/
+├── app.js
 └── server.js
 
-# Architecture Frontend
+Les routes gèrent les endpoints API.
 
-frontend
-│
-├── pages/
-├── js/
-│   ├── auth/
-│   ├── modules/
-│   ├── api/
-│   ├── ui/
-│   ├── data/
-│   └── main.js/
-│
-├── styles/
-│   ├── global/
-│   ├── components/
-│   └── pages/
-│
-└── assets/
-    ├── global/
-    ├── components/
-    └── pages/
+Les controllers reçoivent les requêtes HTTP et gèrent les réponses.
 
----
+Les services centralisent la logique métier et les requêtes PostgreSQL.
 
+Par exemple :
 
-# Logique Métier Implémentée
+auth.controller.js gère login/register,
+order.service.js gère les opérations liées aux commandes et aux créneaux,
+admin.service.js centralise les statistiques dashboard.
 
-## Réservation
+Cette structure m’a permis de mieux comprendre comment organiser une application backend de manière plus propre et évolutive.
 
-Le client peut sélectionner des prestations, choisir une date de collecte, choisir une date de livraison, réserver un créneau.
+## Installation ##
 
-## Gestion des créneaux
+Cloner le projet
+git clone https://github.com/USERNAME/tshaly-pressing.git
 
-Les créneaux possèdent une capacité maximale.
+Installer les dépendances
+npm install
 
-Lorsque le nombre maximum de commandes est atteint le backend refuse la réservation, le frontend désactive automatiquement le créneau.
+Lancer le serveur
+npm run dev
 
-## Workflow Commande
+Exemple de fichier .env
 
-Réservation
-→ Panier
-→ Checkout
-→ Création commande
-→ Paiement simulé
-→ Traitement admin
-→ Livraison
+PORT=5000
 
-Statuts Commande
-en_attente
-collecte
-en_traitement
-pret
-livre
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=tshaly_pressing
+DB_USER=mon_user
+DB_PASSWORD=mon_password
 
-Statuts Paiement
-pending
-paid
-failed
+JWT_SECRET=cle_de_securite_secrete
 
-## API REST Principale
+Pour des raisons de sécurité les vraies variables d’environnement ne sont pas présentes dans le repository.
 
-Auth
+## Ce que j'ai appris ##
 
-POST /api/auth/register
-POST /api/auth/login
+Ce projet m’a surtout permis de mieux comprendre le fonctionnement d’une application Full Stack complète.
 
-Utilisateur
-GET /api/users/profile
-PUT /api/users/profile
-Commandes
-POST /api/orders
-GET /api/orders/my-orders
-PUT /api/orders/:id/payment
-GET /api/orders/slots/unavailable
-Admin
-GET /api/orders
-PUT /api/orders/:id/status
-GET /api/admin/stats
+Avant ce projet, je connaissais surtout les bases frontend (Html, Css et JavaScript).
+
+Le backend m’a obligé à réfléchir différemment sur:
+- la structuration du code,
+- la logique métier,
+- la sécurisation,
+- la validation des données,
+- la communication frontend/backend,
+- la gestion des erreurs,
+- l'organisation des routes.
+
+J’ai également beaucoup appris sur :
+
+- PostgreSQL,
+- les relations entre tables,
+- les middlewares Express,
+- l’authentification JWT,
+- le hashing de mots de passe,
+- le debugging,
+- le déploiement cloud.
+
+La partie API REST a été particulièrement formatrice parce qu’elle m’a obligé à comprendre comment les données circulent réellement entre le frontend, le backend et la base de données.
+
+Le fait de construire un vrai workflow utilisateur m’a aussi permis de mieux comprendre la logique produit derrière une application SaaS.
+
+## Difficultés rencontrées ##
+
+Le projet m’a confronté à plusieurs problèmes assez concrets.
+
+Une des principales difficultés a été la logique de calcul des commandes.
+J’ai rencontré plusieurs bugs liés :
+
+aux quantités,
+au calcul du montant total,
+aux types de données,
+à la synchronisation frontend/backend.
+
+La gestion des créneaux a également demandé plusieurs corrections pour éviter les réservations dépassant la capacité maximale autorisée.
+
+L’authentification JWT a aussi été une étape importante parce qu’elle m’a obligé à comprendre :
+
+- les tokens,
+- les middlewares,
+- les headers,
+- la protection des routes,
+- les rôles utilisateurs/admin.
+
+J’ai aussi rencontré plusieurs erreurs liées :
+
+- à PostgreSQL,
+- à la configuration serveur,
+- aux variables d’environnement,
+- au déploiement,
+- aux appels API côté frontend.
+
+Même si certaines erreurs étaient parfois frustrantes, elles m’ont surtout aidé à progresser en debugging et en compréhension globale du développement backend.
+
+## Améliorations futures ##
+
+Le projet reste une V1 et plusieurs améliorations sont prévues progressivement :
+
+- amélioration de l’interface utilisateur,
+- historique plus détaillé des commandes,
+- notifications utilisateur,
+- gestion plus avancée des paiements,
+- optimisation mobile,
+- validation frontend plus complète,
+- amélioration de la gestion des créneaux,
+- nettoyage et refactorisation progressive du code,
+- ajout de tests backend simples.
+
+Je préfère faire évoluer le projet étape par étape, tout en me formant, plutôt que d’ajouter trop de complexité trop tôt.
+
+## Auteur ##
+
+Développé par un développeur Full Stack en formation, dans une logique d’apprentissage professionnalisante autour du Software Development, des SaaS et des solutions métiers.
+
+Je construis progressivement des projets orientés :
+
+- applications web,
+- automatisation,
+- IA appliquée,
+- outils SaaS,
+- digitalisation métier.
+
+Ce projet fait partie de mon parcours pour évoluer vers un profil Full Stack puis AI Software Developer.
+
+GitHub : https://github.com/MTAdrien
+LinkedIn : https://www.linkedin.com/in/muyard-ta
+
