@@ -144,6 +144,11 @@ function renderOrders() {
         </p>
 
         <p>
+          <strong>Créneau :</strong>
+          ${order.slot || "Non renseigné"}
+        </p>
+
+        <p>
           <strong>Livraison :</strong>
           ${formatDate(order.delivery_date)}
         </p>
