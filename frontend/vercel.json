@@ -1,0 +1,36 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/pages/index.html"
+    },
+    {
+      "source": "/index.html",
+      "destination": "/pages/index.html"
+    },
+    {
+      "source": "/reservation.html",
+      "destination": "/pages/reservation.html"
+    },
+    {
+      "source": "/tarifs.html",
+      "destination": "/pages/tarifs.html"
+    },
+    {
+      "source": "/connexion.html",
+      "destination": "/pages/connexion.html"
+    },
+    {
+      "source": "/inscription.html",
+      "destination": "/pages/inscription.html"
+    },
+    {
+      "source": "/mon-compte.html",
+      "destination": "/pages/mon-compte.html"
+    },
+    {
+      "source": "/dashboard.html",
+      "destination": "/pages/dashboard.html"
+    }
+  ]
+}
