@@ -74,6 +74,24 @@ function formatPaymentStatus(status) {
   return PAYMENT_STATUS_LABELS[status] || "En attente";
 }
 
+// =====================================================================
+// FORMAT DATE
+// =====================================================================
+
+function formatDate(dateValue) {
+  if (!dateValue) {
+    return "Non renseignée";
+  }
+
+  const date = new Date(dateValue);
+
+  if (Number.isNaN(date.getTime())) {
+    return "Non renseignée";
+  }
+
+  return date.toLocaleDateString("fr-FR").replaceAll("/", "-");
+}
+
 /*
 |--------------------------------------------------------------------------
 | RENDER ORDERS
@@ -122,12 +140,12 @@ function renderOrders() {
 
         <p>
           <strong>Collecte :</strong>
-          ${order.pickup_date || "Non renseignée"}
+          ${formatDate(order.pickup_date)}
         </p>
 
         <p>
           <strong>Livraison :</strong>
-          ${order.delivery_date || "Non renseignée"}
+          ${formatDate(order.delivery_date)}
         </p>
 
         <p>
