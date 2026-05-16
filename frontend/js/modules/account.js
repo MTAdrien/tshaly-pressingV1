@@ -124,10 +124,17 @@ function renderOrders(orders) {
         </span>
       </p>
 
-      <p>
-        <strong>Date de collecte :</strong>
-        ${order.pickup_date || "Non renseignée"}
-      </p>
+      <div class="order-schedule">
+        <p>
+          <strong>Date de collecte :</strong>
+          ${order.pickup_date || "Non renseignée"}
+          </p>
+
+       <p>
+          <strong>Créneau :</strong>
+          ${order.slot || "Non renseigné"}
+        </p>
+      </div>
       
       <p>
         <strong>Paiement :</strong>

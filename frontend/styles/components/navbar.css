@@ -21,7 +21,9 @@ nav {
 }
 
 .nav-logo-header img {
-  width: 120px;
+  width: 90px;
+  max-height: 58px;
+  object-fit: contain;
 }
 
 .header-menu {
