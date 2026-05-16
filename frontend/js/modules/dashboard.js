@@ -138,6 +138,7 @@ function renderOrders() {
           ${order.firstname || ""} ${order.lastname || ""} — ${order.email || ""}
         </p>
 
+        <div class="order-schedule">
         <p>
           <strong>Collecte :</strong>
           ${formatDate(order.pickup_date)}
@@ -147,6 +148,7 @@ function renderOrders() {
           <strong>Créneau :</strong>
           ${order.slot || "Non renseigné"}
         </p>
+        </div>
 
         <p>
           <strong>Livraison :</strong>
