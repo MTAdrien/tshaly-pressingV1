@@ -49,11 +49,13 @@ function renderServices() {
                     <p>
                       ${item.description}
                     </p>
-
                     <div class="service-price">
-                      ${item.price}€
+                      ${
+                        typeof item.price === "number"
+                          ? `${item.price}€`
+                          : item.price
+                      }
                     </div>
-
                     <div class="service-actions">
 
                       <input
@@ -63,11 +65,24 @@ function renderServices() {
                         class="quantity-input"
                       >
 
-                      <button
-                        class="btn-cta add-to-cart-btn"
-                      >
-                        Ajouter
-                      </button>
+                      ${
+                        typeof item.price === "number"
+                          ? `
+                            <button
+                              class="btn-cta add-to-cart-btn"
+                            >
+                              Ajouter
+                            </button>
+                          `
+                        : `
+                            <button
+                              class="btn-cta"
+                              disabled
+                            >
+                              Sur devis
+                            </button>
+                          `
+                      }
 
                     </div>
 

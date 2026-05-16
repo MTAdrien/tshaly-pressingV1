@@ -30,7 +30,10 @@ function renderTarifs() {
                                 </div>
 
                                 <div class="tarif-price">
-                                    ${item.price}€
+                                    ${typeof item.price === "number"
+                                        ? `${item.price}€`
+                                        : item.price
+                            }
                                 </div>
 
                             </div>
