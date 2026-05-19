@@ -4,7 +4,8 @@ Tshaly Pressing est un projet Full Stack développé autour d’un besoin métie
 Permettre à un pressing de gérer ses commandes en ligne avec une logique proche d’un vrai fonctionnement terrain.
 
 L’idée de départ était de comprendre comment construire une application SaaS complète côté frontend et backend, tout en travaillant sur un projet crédible pour mon portfolio développeur junior.
-Au fil du développement, le projet a évolué vers une application plus structurée avec authentification, gestion des commandes, logique de créneaux, dashboard administrateur et communication API REST.
+
+Ce projet a également été pour moi une manière d’apprendre à développer dans un environnement moderne où les outils d’IA prennent une place importante. Certaines parties du code ont été générées ou accélérées avec l’aide de l’IA, mais l’objectif principal reste la compréhension de la logique métier, de l’architecture et du fonctionnement global de l’application.
 
 Le fonctionnement général est le suivant :
 
@@ -57,19 +58,19 @@ Retour :
 
 Les captures sont accèssibles dans "README/assets/screenshots/":
 
-![Accueil](README/assets/screenshots/home.png) et (README/assets/screenshots/home-mobile.png)
+![Accueil](README/assets/screenshots/home.png) et ![Accueil mobile](README/assets/screenshots/home-mobile.png)
 
-![Dashboard](README/assets/screenshots/dashboard.png) et (README/assets/screenshots/dashboard-mobile.png)
+![Dashboard](README/assets/screenshots/dashboard.png) et ![Dashboard mobile](README/assets/screenshots/dashboard-mobile.png)
 
-![Mon Compte](README/assets/screenshots/mon-compte.png) et (README/assets/screenshots/mon-compte.png)
+![Mon Compte](README/assets/screenshots/mon-compte.png) et ![Mon compte mobile](README/assets/screenshots/mon-compte.png)
 
-![Réservation](README/assets/screenshots/reservation.png) et (README/assets/screenshots/reservation-mobile.png)
+![Réservation](README/assets/screenshots/reservation.png) et ![Réservation mobile](README/assets/screenshots/reservation-mobile.png)
 
-![Tarifs](README/assets/screenshots/tarifs.png) et (README/assets/screenshots/tarifs-mobile.png)
+![Tarifs](README/assets/screenshots/tarifs.png) et ![Tarifs mobile](README/assets/screenshots/tarifs-mobile.png)
 
-![Inscription](README/assets/screenshots/inscription.png) et (README/assets/screenshots/inscription-mobile.png)
+![Inscription](README/assets/screenshots/inscription.png) et ![Inscription mobile](README/assets/screenshots/inscription-mobile.png)
 
-![Connexion](README/assets/screenshots/connexion.png) et (README/assets/screenshots/connexion-mobile.png)
+![Connexion](README/assets/screenshots/connexion.png) et ![connexion mobile](README/assets/screenshots/connexion-mobile.png)
 
 ## Fonctionnalités ##
 
@@ -191,7 +192,7 @@ Cette structure m’a permis de mieux comprendre comment organiser une applicati
 ## Installation ##
 
 Cloner le projet
-git clone https://github.com/USERNAME/tshaly-pressing.git
+git clone https://github.com/MTAdrien/tshaly-pressing.git
 
 Installer les dépendances
 npm install
