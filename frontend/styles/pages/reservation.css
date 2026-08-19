@@ -136,15 +136,12 @@
 */
 
 @media screen and (max-width: 992px) {
-
   .services-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-
 }
 
 @media screen and (max-width: 768px) {
-
   .services-grid {
     grid-template-columns: 1fr;
   }
@@ -152,7 +149,6 @@
   .reservation-dates {
     grid-template-columns: 1fr;
   }
-
 }
 
 .accordion-container {
@@ -271,41 +267,45 @@
 }
 
 .slots-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-top: 15px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 15px;
 }
 
 .slot {
-    padding: 10px;
-    border: 1px solid #ddd;
-    background: white;
-    cursor: pointer;
-    border-radius: 8px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  border-radius: 8px;
 }
 
 .slot.active {
-    background: var(--color-primary);
-    color: white;
+  background: var(--color-primary);
+  color: white;
 }
 
 .btn-loader {
-    width: 16px;
-    height: 16px;
-    border: 2px solid white;
-    border-top: 2px solid transparent;
-    border-radius: 50%;
-    display: inline-block;
-    animation: spin 0.8s linear infinite;
-    margin-left: 8px;
+  width: 16px;
+  height: 16px;
+  border: 2px solid white;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  display: inline-block;
+  animation: spin 0.8s linear infinite;
+  margin-left: 8px;
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
