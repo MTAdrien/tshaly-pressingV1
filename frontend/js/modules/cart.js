@@ -7,20 +7,11 @@
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-//=========================================================================
-// DOM ELEMENTS
-//=========================================================================
-
-
 const addButtons = document.querySelectorAll(".add-to-cart-btn");
 const cartItemsContainer = document.getElementById("cart-items");
 const cartTotal = document.getElementById("cart-total");
 const cartCount = document.getElementById("cart-count");
 const cartSection = document.getElementById("cart-section");
-
-// =========================================================================
-//  AJOUTER AU PANIER
-// =========================================================================
 
 addButtons.forEach((button) => {
   button.addEventListener("click", (event) => {
@@ -59,17 +50,9 @@ addButtons.forEach((button) => {
   });
 });
 
-// ==========================================================================
-//  SAUVEGARDER LE PANIER
-// =========================================================================
-
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
-
-// ==========================================================================
-//  RENDER LE PANIER
-// =========================================================================
 
 function renderCart() {
   updateCartCount();
@@ -116,10 +99,6 @@ function renderCart() {
   initRemoveButtons();
 }
 
-// ==========================================================================
-//  SUPPRIMER UN ARTICLE
-// ==========================================================================
-
 function initRemoveButtons() {
   const removeButtons = document.querySelectorAll(".remove-btn");
 
@@ -137,10 +116,6 @@ function initRemoveButtons() {
   });
 }
 
-// ==========================================================================
-//  MISE À JOUR DU COMPTEUR
-// ==========================================================================
-
 function updateCartCount() {
   if (!cartCount) return;
 
@@ -153,9 +128,5 @@ function updateCartCount() {
   cartCount.textContent = totalItems;
   cartCount.classList.toggle("hidden", totalItems === 0);
 }
-
-// ==========================================================================
-//  INIT
-// ==========================================================================
 
 renderCart();

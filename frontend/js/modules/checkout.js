@@ -1,15 +1,7 @@
-// ==========================================================================
-// DOM ELEMENTS
-// ==========================================================================
-
 const checkoutButton = document.querySelector(".checkout-btn");
 const slots = document.querySelectorAll(".slot");
 const pickupDateInput = document.getElementById("pickup-date");
 const deliveryDateInput = document.getElementById("delivery-date");
-
-// ==========================================================================
-// ETAT DE LA SÉLECTION DES CRÉNEAUX
-// ==========================================================================
 
 let selectedSlot = null;
 
@@ -36,14 +28,6 @@ slots.forEach((slot) => {
   });
 });
 
-
-// ==========================================================================
-// LOAD UNAVAILABLE SLOTS
-// ==========================================================================
-// Le frontend demande au backend quels créneaux sont complets.
-// --------------------------------------------------------------------------
-
-
 async function loadUnavailableSlots() {
   const pickupDate = pickupDateInput.value;
 
@@ -64,12 +48,6 @@ async function loadUnavailableSlots() {
   }
 }
 
-// ==========================================================================
-// REINITIALISATION DES CRÉNEAUX
-// ==========================================================================
-// Réinitialise l'état des créneaux avant de charger les créneaux complets.
-// --------------------------------------------------------------------------
-
 function resetSlots() {
   slots.forEach((slot) => {
     if (!slot.dataset.value) {
@@ -83,10 +61,6 @@ function resetSlots() {
   });
 }
 
-// ==========================================================================
-// DESACTIVATION DES CRÉNEAUX INDISPONIBLES
-// ==========================================================================
-
 function disableUnavailableSlots(unavailableSlots) {
   slots.forEach((slot) => {
     const slotValue = slot.dataset.value;
@@ -99,17 +73,9 @@ function disableUnavailableSlots(unavailableSlots) {
   });
 }
 
-// ==========================================================================
-// CHANGEMENT DE DATE DE COLLECTE
-// ==========================================================================
-
 if (pickupDateInput) {
   pickupDateInput.addEventListener("change", loadUnavailableSlots);
 }
-
-// ==========================================================================
-// CHECKOUT
-// ==========================================================================
 
 if (checkoutButton) {
   checkoutButton.addEventListener("click", async () => {
@@ -161,10 +127,6 @@ if (checkoutButton) {
   });
 }
 
-// ==========================================================================
-// VALIDATION DU CHECKOUT
-// ==========================================================================
-
 function validateCheckout(cart, pickupDate, deliveryDate) {
   if (cart.length === 0) {
     showToast("Votre panier est vide.", "error");
@@ -189,12 +151,6 @@ function validateCheckout(cart, pickupDate, deliveryDate) {
   return true;
 }
 
-// ==========================================================================
-// CRÉATION DE LA COMMANDE
-// ==========================================================================
-// Envoie une requête API pour créer une nouvelle commande avec les informations fournies.
-// --------------------------------------------------------------------------
-
 async function createOrder(pickupDate, deliveryDate, slot, cart) {
   return await apiRequest("/orders", {
     method: "POST",
@@ -207,10 +163,6 @@ async function createOrder(pickupDate, deliveryDate, slot, cart) {
   });
 }
 
-// ==========================================================================
-// SIMULATION DE PAIEMENT
-// ==========================================================================
-
 async function simulatePayment(orderId) {
   return await apiRequest(`/orders/${orderId}/payment`, {
     method: "PUT",
@@ -219,10 +171,6 @@ async function simulatePayment(orderId) {
     }),
   });
 }
-
-// ==========================================================================
-// ETAT DE CHARGEMENT DU CHECKOUT
-// ==========================================================================
 
 function setLoading(button, isLoading) {
   const text = button.querySelector(".btn-text");

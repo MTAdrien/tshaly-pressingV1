@@ -4,32 +4,14 @@
 // Auteur : Muyard Tayayi Adrien
 // Date de création : 5 Mai 2026
 // =======================================================================
-
-// =====================================================================
-// DOM 
-// =====================================================================
-
 const profileForm = document.getElementById("profile-form");
 const profileFirstname = document.getElementById("profile-firstname");
 const profileLastname = document.getElementById("profile-lastname");
 const profilePhone = document.getElementById("profile-phone");
 const profileAddress = document.getElementById("profile-address");
 const logoutBtn = document.getElementById("logout-btn");
-
-/*
-|--------------------------------------------------------------------------
-| ACCOUNT PAGE
-|--------------------------------------------------------------------------
-*/
-
 const userInfo = document.getElementById("user-info");
 const ordersContainer = document.getElementById("orders-container");
-
-/*
-|--------------------------------------------------------------------------
-| RENDER USER
-|--------------------------------------------------------------------------
-*/
 
 function renderUser(user) {
   userInfo.innerHTML = `
@@ -100,12 +82,6 @@ function formatDate(dateValue) {
   return date.toLocaleDateString("fr-FR").replaceAll("/", "-");
 }
 
-/*
-|--------------------------------------------------------------------------
-| RENDER ORDERS
-|--------------------------------------------------------------------------
-*/
-
 function renderOrders(orders) {
   if (!orders || orders.length === 0) {
     ordersContainer.innerHTML = "<p>Aucune commande pour le moment.</p>";
@@ -153,7 +129,7 @@ function renderOrders(orders) {
           ${order.slot || "Non renseigné"}
         </p>
       </div>
-      
+
       <p>
         <strong>Paiement :</strong>
         <span class="status ${order.payment_status}">
@@ -217,12 +193,6 @@ if (logoutBtn) {
   });
 }
 
-/*
-|--------------------------------------------------------------------------
-| LOAD ACCOUNT DATA
-|--------------------------------------------------------------------------
-*/
-
 async function loadAccountData() {
   try {
     const profile = await apiRequest("/users/profile");
@@ -242,11 +212,5 @@ async function loadAccountData() {
     }, 800);
   }
 }
-
-/*
-|--------------------------------------------------------------------------
-| INIT
-|--------------------------------------------------------------------------
-*/
 
 loadAccountData();

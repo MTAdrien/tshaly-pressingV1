@@ -1,19 +1,7 @@
-/*
-|--------------------------------------------------------------------------
-| AUTH NAVBAR
-|--------------------------------------------------------------------------
-*/
-
 const authUser = getCurrentUser();
 
 const accountLink = document.getElementById("account-link");
 const headerMenu = document.querySelector(".header-menu");
-
-/*
-|--------------------------------------------------------------------------
-| ACCOUNT LINK
-|--------------------------------------------------------------------------
-*/
 
 if (authUser && accountLink) {
   accountLink.textContent = "Mon compte";
@@ -22,12 +10,6 @@ if (authUser && accountLink) {
   accountLink.textContent = "Connexion";
   accountLink.href = "connexion.html";
 }
-
-/*
-|--------------------------------------------------------------------------
-| ADMIN DASHBOARD LINK
-|--------------------------------------------------------------------------
-*/
 
 if (authUser && authUser.role === "admin" && headerMenu) {
   const adminLi = document.createElement("li");

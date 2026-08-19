@@ -1,9 +1,5 @@
-// DOM
-
 const servicesContainer =
     document.getElementById("services-container");
-
-// RENDER SERVICES
 
 function renderServices() {
 
@@ -110,22 +106,15 @@ function renderServices() {
 
 }
 
-// INIT
-
 renderServices();
 
-// ACCORDION
-
 document.addEventListener("click", (event) => {
-
-    //   MAIN ACCORDION
 
     if (
         event.target.classList.contains(
             "accordion-btn"
         )
     ) {
-
         const content =
             event.target.nextElementSibling;
 
@@ -134,15 +123,11 @@ document.addEventListener("click", (event) => {
                 ? "none"
                 : "block";
     }
-
-    //   SUBCATEGORY ACCORDION
-
     if (
         event.target.classList.contains(
             "subcategory-btn"
         )
     ) {
-
         const content =
             event.target.nextElementSibling;
 
@@ -151,6 +136,4 @@ document.addEventListener("click", (event) => {
                 ? "none"
                 : "block";
     }
-
 });
-

@@ -1,9 +1,3 @@
-/*
-|--------------------------------------------------------------------------
-| PROTECTION
-|--------------------------------------------------------------------------
-*/
-
 const adminUser = getCurrentUser();
 
 if (!adminUser || adminUser.role !== "admin") {
@@ -11,31 +5,13 @@ if (!adminUser || adminUser.role !== "admin") {
   throw new Error("Accès dashboard refusé");
 }
 
-/*
-|--------------------------------------------------------------------------
-| DOM
-|--------------------------------------------------------------------------
-*/
-
 const totalOrders = document.getElementById("total-orders");
 const totalRevenue = document.getElementById("total-revenue");
 const pendingOrders = document.getElementById("pending-orders");
 const totalClients = document.getElementById("total-clients");
 const adminOrders = document.getElementById("admin-orders");
 
-/*
-|--------------------------------------------------------------------------
-| STATE
-|--------------------------------------------------------------------------
-*/
-
 let orders = [];
-
-/*
-|--------------------------------------------------------------------------
-| RENDER STATS
-|--------------------------------------------------------------------------
-*/
 
 function renderStats(stats) {
   totalOrders.textContent = stats.totalOrders || 0;
@@ -43,10 +19,6 @@ function renderStats(stats) {
   pendingOrders.textContent = stats.pendingOrders || 0;
   totalClients.textContent = stats.totalClients || 0;
 }
-
-// =====================================================================
-// STATUS LABELS
-// =====================================================================
 
 const STATUS_LABELS = {
   en_attente: "En attente",
@@ -60,10 +32,6 @@ function formatStatus(status) {
   return STATUS_LABELS[status] || "En attente";
 }
 
-// =====================================================================
-// PAYMENT STATUS LABELS
-// ===================================================================== 
-
 const PAYMENT_STATUS_LABELS = {
   pending: "En attente",
   paid: "Payé",
@@ -73,10 +41,6 @@ const PAYMENT_STATUS_LABELS = {
 function formatPaymentStatus(status) {
   return PAYMENT_STATUS_LABELS[status] || "En attente";
 }
-
-// =====================================================================
-// FORMAT DATE
-// =====================================================================
 
 function formatDate(dateValue) {
   if (!dateValue) {
@@ -92,11 +56,6 @@ function formatDate(dateValue) {
   return date.toLocaleDateString("fr-FR").replaceAll("/", "-");
 }
 
-/*
-|--------------------------------------------------------------------------
-| RENDER ORDERS
-|--------------------------------------------------------------------------
-*/
 
 function renderOrders() {
   adminOrders.innerHTML = "";
@@ -132,7 +91,7 @@ function renderOrders() {
           <strong>Détail commande :</strong>
           ${itemsDetails || "Aucun détail disponible"}
         </p>
-        
+
         <p>
           <strong>Client :</strong>
           ${order.firstname || ""} ${order.lastname || ""} — ${order.email || ""}
@@ -188,12 +147,6 @@ function renderOrders() {
   initStatusEvents();
 }
 
-/*
-|--------------------------------------------------------------------------
-| STATUS EVENTS
-|--------------------------------------------------------------------------
-*/
-
 function initStatusEvents() {
   const selects = document.querySelectorAll(".status-select");
 
@@ -220,12 +173,6 @@ function initStatusEvents() {
   });
 }
 
-/*
-|--------------------------------------------------------------------------
-| LOAD DASHBOARD
-|--------------------------------------------------------------------------
-*/
-
 async function loadDashboard() {
   try {
     const stats = await apiRequest("/admin/stats");
@@ -238,11 +185,5 @@ async function loadDashboard() {
     showToast(error.message, "error");
   }
 }
-
-/*
-|--------------------------------------------------------------------------
-| INIT
-|--------------------------------------------------------------------------
-*/
 
 loadDashboard();
