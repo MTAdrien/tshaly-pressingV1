@@ -1,9 +1,3 @@
-// =======================================================================
-// Fichier : frontend/js/modules/account.js
-// Description : Gère la page de compte utilisateur, affichant les informations personnelles et les commandes passées.
-// Auteur : Muyard Tayayi Adrien
-// Date de création : 5 Mai 2026
-// =======================================================================
 const profileForm = document.getElementById("profile-form");
 const profileFirstname = document.getElementById("profile-firstname");
 const profileLastname = document.getElementById("profile-lastname");
@@ -23,20 +17,12 @@ function renderUser(user) {
   `;
 }
 
-// =====================================================================
-// INFOS UTILISATEUR
-// =====================================================================
-
 function fillProfileForm(user) {
   profileFirstname.value = user.firstname || "";
   profileLastname.value = user.lastname || "";
   profilePhone.value = user.phone || "";
   profileAddress.value = user.address || "";
 }
-
-// =====================================================================
-// STATUS LABELS
-// =====================================================================
 
 const STATUS_LABELS = {
   en_attente: "En attente",
@@ -50,10 +36,6 @@ function formatStatus(status) {
   return STATUS_LABELS[status] || "En attente";
 }
 
-// =====================================================================
-// PAYMENT STATUS LABELS
-// =====================================================================
-
 const PAYMENT_STATUS_LABELS = {
   pending: "En attente",
   paid: "Payé",
@@ -63,10 +45,6 @@ const PAYMENT_STATUS_LABELS = {
 function formatPaymentStatus(status) {
   return PAYMENT_STATUS_LABELS[status] || "En attente";
 }
-
-// =====================================================================
-// FORMAT DATE
-// =====================================================================
 
 function formatDate(dateValue) {
   if (!dateValue) {
@@ -151,11 +129,6 @@ function renderOrders(orders) {
     ordersContainer.appendChild(orderCard);
   });
 }
-
-// =====================================================================
-// MODIFICATIONS PROFIL
-// =====================================================================
-
 if (profileForm) {
   profileForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -182,10 +155,6 @@ if (profileForm) {
     }
   });
 }
-
-// =====================================================================
-// LOGOUT
-// =====================================================================
 
 if (logoutBtn) {
   logoutBtn.addEventListener("click", () => {
