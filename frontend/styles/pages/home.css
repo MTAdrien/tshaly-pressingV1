@@ -87,6 +87,7 @@
 .history-image img {
   width: 100%;
   max-width: 450px;
+  border-radius: 12px;
   margin: 0 auto;
 }
 
