@@ -1,7 +1,5 @@
 import pool from "../config/db.js";
 
-// CREATION COMMANDE
-
 export const createOrder = async (userId, pickup_date, delivery_date, slot) => {
   const result = await pool.query(
     `INSERT INTO orders (user_id, pickup_date, delivery_date, slot)
@@ -12,8 +10,6 @@ export const createOrder = async (userId, pickup_date, delivery_date, slot) => {
 
   return result.rows[0];
 };
-
-// AJOUTER ITEM COMMANDE (PANIER)
 
 export const addOrderItem = async (orderId, item) => {
   const { service_name, quantity, price } = item;
@@ -27,8 +23,6 @@ export const addOrderItem = async (orderId, item) => {
 
   return result.rows[0];
 };
-
-// GET ORDERS USER
 
 export const getUserOrders = async (userId) => {
   const result = await pool.query(
@@ -64,8 +58,6 @@ export const getUserOrders = async (userId) => {
 
   return result.rows;
 };
-
-// GET ALL ORDERS (ADMIN)
 
 export const getAllOrders = async () => {
   const result = await pool.query(
@@ -105,8 +97,6 @@ export const getAllOrders = async () => {
   return result.rows;
 };
 
-// UPDATE STATUS
-
 export const updateOrderStatus = async (orderId, status) => {
   const result = await pool.query(
     `UPDATE orders
@@ -118,8 +108,6 @@ export const updateOrderStatus = async (orderId, status) => {
 
   return result.rows[0];
 };
-
-// UPDATE TOTAL PRICE COMMANDE
 
 export const updateOrderTotal = async (orderId, totalPrice) => {
   const result = await pool.query(
@@ -133,8 +121,6 @@ export const updateOrderTotal = async (orderId, totalPrice) => {
   return result.rows[0];
 };
 
-// UPDATE PAYMENT STATUS
-
 export const updatePaymentStatus = async (orderId, paymentStatus) => {
   const result = await pool.query(
     `UPDATE orders
@@ -147,8 +133,6 @@ export const updatePaymentStatus = async (orderId, paymentStatus) => {
   return result.rows[0];
 };
 
-// COUNT ORDERS BY SLOT AND PICKUP DATE
-
 export const countOrdersBySlotAndDate = async (pickupDate, slot) => {
   const result = await pool.query(
     `SELECT COUNT(*)
@@ -160,8 +144,6 @@ export const countOrdersBySlotAndDate = async (pickupDate, slot) => {
 
   return Number(result.rows[0].count);
 };
-
-// GET FULL SLOTS BY DATE
 
 export const getFullSlotsByDate = async (
   pickupDate,

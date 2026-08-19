@@ -14,14 +14,10 @@ import { adminOnly } from "../middlewares/admin.middleware.js";
 
 const router = express.Router();
 
-// CLIENT
-
 router.post("/", protect, createNewOrder);
 router.get("/my-orders", protect, getMyOrders);
 router.get("/slots/unavailable", protect, getUnavailableSlots);
 router.put("/:id/payment", protect, simulatePayment);
-
-// ADMIN
 
 router.get("/", protect, adminOnly, getOrders);
 router.put("/:id/status", protect, adminOnly, changeOrderStatus);

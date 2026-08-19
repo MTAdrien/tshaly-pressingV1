@@ -2,8 +2,6 @@ import bcrypt from "bcrypt";
 import { createUser, findUserByEmail } from "../services/auth.service.js";
 import { generateToken } from "../utils/generateToken.js";
 
-// REGISTER
-
 export const register = async (req, res) => {
   try {
     const { firstname, lastname, email, password } = req.body;
@@ -58,8 +56,6 @@ export const register = async (req, res) => {
     });
   }
 };
-
-// LOGIN
 
 export const login = async (req, res) => {
   try {

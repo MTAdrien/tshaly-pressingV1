@@ -10,8 +10,6 @@ import {
   getFullSlotsByDate,
 } from "../services/order.service.js";
 
-// CREATION COMMANDE
-
 export const createNewOrder = async (req, res) => {
   try {
     const { pickup_date, delivery_date, slot, items } = req.body;
@@ -106,8 +104,6 @@ export const createNewOrder = async (req, res) => {
   }
 };
 
-// COMMANDES UTILISATEUR
-
 export const getMyOrders = async (req, res) => {
   try {
     const orders = await getUserOrders(req.user.id);
@@ -118,8 +114,6 @@ export const getMyOrders = async (req, res) => {
     res.status(500).json({ message: "Erreur serveur", error });
   }
 };
-
-// CRENEAUX COMPLETS PAR DATE
 
 export const getUnavailableSlots = async (req, res) => {
   try {
@@ -147,8 +141,6 @@ export const getUnavailableSlots = async (req, res) => {
   }
 };
 
-// TOUTES LES COMMANDES (ADMIN)
-
 export const getOrders = async (req, res) => {
   try {
     const orders = await getAllOrders();
@@ -159,8 +151,6 @@ export const getOrders = async (req, res) => {
     res.status(500).json({ message: "Erreur serveur", error });
   }
 };
-
-// UPDATE STATUT COMMANDE (ADMIN)
 
 export const changeOrderStatus = async (req, res) => {
   try {
@@ -199,8 +189,6 @@ export const changeOrderStatus = async (req, res) => {
     });
   }
 };
-
-// SIMULATION PAIEMENT COMMANDE
 
 export const simulatePayment = async (req, res) => {
   try {

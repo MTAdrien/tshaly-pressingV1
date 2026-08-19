@@ -4,8 +4,6 @@ import {
   getTopClients,
 } from "../services/admin.service.js";
 
-// Stats globales du dashboard
-
 export const dashboardStats = async (req, res) => {
   try {
     const stats = await getDashboardStats();
@@ -19,8 +17,6 @@ export const dashboardStats = async (req, res) => {
     });
   }
 };
-
-// Commandes récentes
 
 export const recentOrders = async (req, res) => {
   try {
@@ -36,8 +32,6 @@ export const recentOrders = async (req, res) => {
   }
 };
 
-// Top clients
-
 export const topClients = async (req, res) => {
   try {
     const clients = await getTopClients();
@@ -51,8 +45,6 @@ export const topClients = async (req, res) => {
     });
   }
 };
-
-// Dashboard complet
 
 export const fullDashboard = async (req, res) => {
   try {

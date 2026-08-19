@@ -5,8 +5,6 @@ import {
   deleteUser,
 } from "../services/user.service.js";
 
-// PROFIL UTILISATEUR
-
 export const getProfile = async (req, res) => {
   try {
     const user = await getUserById(req.user.id);
@@ -20,8 +18,6 @@ export const getProfile = async (req, res) => {
     });
   }
 };
-
-// UPDATE PROFIL
 
 export const updateProfile = async (req, res) => {
   try {
@@ -43,8 +39,6 @@ export const updateProfile = async (req, res) => {
   }
 };
 
-// GET ALL USERS (ADMIN)
-
 export const getUsers = async (req, res) => {
   try {
     const users = await getAllUsers();
@@ -58,8 +52,6 @@ export const getUsers = async (req, res) => {
     });
   }
 };
-
-// DELETE USER (ADMIN)
 
 export const removeUser = async (req, res) => {
   try {

@@ -1,7 +1,5 @@
 import pool from "../config/db.js";
 
-// Récupérer un utilisateur par ID
-
 export const getUserById = async (id) => {
   const result = await pool.query(
     `SELECT id, firstname, lastname, email, phone, address, role
@@ -13,8 +11,6 @@ export const getUserById = async (id) => {
   return result.rows[0];
 };
 
-// Récupérer tous les utilisateurs
-
 export const getAllUsers = async () => {
   const result = await pool.query(
     `SELECT id, firstname, lastname, email, role
@@ -24,8 +20,6 @@ export const getAllUsers = async () => {
 
   return result.rows;
 };
-
-// Mise à jour profil utilisateur
 
 export const updateUserProfile = async (id, userData) => {
   const { firstname, lastname, phone, address } = userData;
@@ -43,8 +37,6 @@ export const updateUserProfile = async (id, userData) => {
 
   return result.rows[0];
 };
-
-// Supprimer utilisateur
 
 export const deleteUser = async (id) => {
   await pool.query(
